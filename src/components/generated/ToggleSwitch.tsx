@@ -49,13 +49,13 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       shadow: 'shadow-md'
     },
     magenta: {
-      bg: checked ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-gray-600/50',
+      bg: checked ? 'bg-[#E20074]' : 'bg-gray-700/50',
       thumb: 'bg-white',
-      shadow: 'shadow-lg shadow-pink-500/25'
+      shadow: 'shadow-lg shadow-[#E20074]/25'
     },
     glass: {
       bg: checked ? 'bg-white/20 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md',
-      thumb: checked ? 'bg-gradient-to-r from-pink-500 to-purple-600' : 'bg-white/80',
+      thumb: checked ? 'bg-[#E20074]' : 'bg-white/80',
       shadow: 'shadow-lg shadow-black/25'
     }
   };
@@ -83,11 +83,11 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         stiffness: 500,
         damping: 30
       }} style={{
-        filter: variant === 'magenta' && checked ? 'drop-shadow(0 0 8px rgba(236, 72, 153, 0.5))' : undefined
+        filter: variant === 'magenta' && checked ? 'drop-shadow(0 0 8px rgba(226, 0, 116, 0.5))' : undefined
       }} data-magicpath-id="4" data-magicpath-path="ToggleSwitch.tsx" />
 
         {/* Glow effect for active state */}
-        {checked && variant === 'magenta' && <motion.div className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 opacity-30" initial={{
+        {checked && variant === 'magenta' && <motion.div className="absolute inset-0 rounded-full bg-[#E20074] opacity-30" initial={{
         scale: 1
       }} animate={{
         scale: [1, 1.1, 1]
