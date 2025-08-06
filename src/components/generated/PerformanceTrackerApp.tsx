@@ -26,37 +26,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "e194ac8f-c7f6-483c-8644-c322e1734d9a"
+    mpid: "f4e74d5f-bf1e-443c-9bec-cd9f1afc8465"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "dd1569c9-c6c9-47bb-b3de-7d95c5bbb5af"
+    mpid: "32a87ccb-a5f8-4cce-8135-ba525f983b45"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "3d129d24-3418-4748-907e-066e81151812"
+    mpid: "321d0750-4adf-49ce-ae27-5456a4ab0fa3"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "886832c4-1d37-4681-a31f-527732ec611a"
+    mpid: "8bbd2bbd-69ae-42ee-b5c3-a459a7778fc8"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "a5ea343a-7ac8-40ce-97e7-aa1543af28ba"
+    mpid: "b5a33d55-e6cb-46e3-a9b4-9d3e5ee218fa"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "cb91c69f-000f-4ee8-9ebe-8fab9c7dfde2"
+    mpid: "9e9aebba-2930-494c-a897-ba70318b02b1"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -169,32 +169,32 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "df22561f-6937-4441-b7df-bffaf3596b16"
+          mpid: "7f1e9466-98bf-43dc-bd0b-7a53deec4af9"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "4e8c741f-ab8f-4979-9fc5-8ab6466c23ce"
+          mpid: "47403586-8735-4b4c-8bae-20471509accc"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "6954f45d-3f65-46f2-bd28-17c79efd3dff"
+          mpid: "75b50e18-82e9-4534-9cc7-441ea8f5a17d"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "646f9a5b-0048-4218-9520-b41f978073a5"
+          mpid: "70848f08-9d67-406d-b111-af3088ee0736"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "82880b1d-bdbd-403f-95da-84568cbc3929"
+          mpid: "fabee703-6e32-4d11-bae8-f87f5183a014"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "7b7f3bb6-94dc-4ea7-b2e2-7e9e1a46fdfc"
+          mpid: "1f27fb56-2603-404f-9688-388c6ff4fe0d"
         }].map((item, index) => <motion.div key={item.label} initial={{
           opacity: 0,
           y: 20
