@@ -28,31 +28,31 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     icon: Home,
     label: 'Home',
     activeScreens: ['home'],
-    mpid: "ec2ba464-9626-410f-ae0d-d4714bc3d0f1"
+    mpid: "024a1e66-fc2d-4f4f-a5d3-8423af21bfc3"
   }, {
     id: 'dashboard',
     icon: BarChart3,
     label: 'Dashboard',
     activeScreens: ['dashboard'],
-    mpid: "09f30212-f82c-43ea-beeb-805277963fb5"
+    mpid: "f014f34b-8f72-47e9-bb8c-8d75e90165f0"
   }, {
     id: 'upload',
     icon: Upload,
     label: 'Upload',
     activeScreens: ['upload'],
-    mpid: "c25f7f05-7047-407a-ab66-890084ddad4e"
+    mpid: "7b16c353-0ece-4916-a10e-e1665b1b2961"
   }, {
     id: 'metrics',
     icon: TrendingUp,
     label: 'Metrics',
     activeScreens: ['metrics'],
-    mpid: "46f0bc49-624a-4fc0-96a8-ed0264bd8577"
+    mpid: "87614fdf-881f-4e6f-ad72-ec0ca020bd64"
   }, {
     id: 'goals',
     icon: Target,
     label: 'Goals',
     activeScreens: ['goals', 'daily', 'catchup'],
-    mpid: "73b06c1c-5e6a-4a59-adab-b4c8b8dcb870"
+    mpid: "82fec931-c1fc-471f-b0db-e371d9c5a750"
   }];
   const isActive = (item: NavItem) => {
     return item.activeScreens.includes(currentScreen) || item.id === currentScreen;
@@ -98,7 +98,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
               ease: 'easeOut'
             }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="7" data-magicpath-path="BottomNavBar.tsx">
                   {/* Active background */}
-                  {active && <motion.div layoutId="activeTab" className="absolute inset-0 bg-gradient-to-br from-[#E20074]/20 to-[#B91C5C]/20 rounded-xl border border-gray-600/30" transition={{
+                  {active && <motion.div layoutId="activeTab" className="absolute inset-0 bg-gradient-to-br from-[#E20074]/20 to-[#20074]/20 rounded-xl border border-gray-600/30" transition={{
                 type: "spring",
                 stiffness: 500,
                 damping: 30
@@ -115,7 +115,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 }} animate={{
                   scale: 1,
                   opacity: 1
-                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#B91C5C] rounded-full shadow-lg" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
+                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full shadow-lg" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
                   </div>
                   
                   {/* Label */}

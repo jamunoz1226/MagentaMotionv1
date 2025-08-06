@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Upload, Target, Calendar, BarChart3, TrendingUp, Smartphone, Award, ArrowRight, Camera, FileText, CheckCircle, X } from 'lucide-react';
+import { cn } from '../../lib/utils';
 import MatteCard from './GlassCard';
 import ProgressRing from './ProgressRing';
 import ToggleSwitch from './ToggleSwitch';
@@ -26,37 +27,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "0ba92ffe-87c9-46a0-9857-b6d3f71c78a4"
+    mpid: "6203db36-84d2-4c49-8dbc-e919e8b293b4"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "25369143-808f-4956-9f86-31fb715ad024"
+    mpid: "9af9257f-d372-4a2b-9c12-8484de9bc726"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "eda1d1d8-0c83-4377-b0cd-8583a326c395"
+    mpid: "e21b95fd-a0b5-4486-a981-615b61185664"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "0c0ff74f-2dd1-428f-b408-b67619e2bd39"
+    mpid: "4d060897-5229-453f-bc39-2ca4011941cf"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "534183aa-b938-4f47-ad22-3942677b6037"
+    mpid: "bed03654-484d-4919-ba0b-df64f07bf157"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "a5b4a215-5bfa-4801-9c3d-80261749e573"
+    mpid: "de2030b2-be31-4218-b740-b3cac07f9715"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -78,7 +79,7 @@ const PerformanceTrackerApp: React.FC = () => {
       setTimeout(() => setShowToast(false), 3000);
     }, 2000);
   };
-  const renderWelcomeScreen = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4" data-magicpath-id="0" data-magicpath-path="PerformanceTrackerApp.tsx">
+  const renderWelcomeScreen = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4" data-magicpath-id="0" data-magicpath-path="PerformanceTrackerApp.tsx">
       <div className="max-w-md mx-auto pt-20" data-magicpath-id="1" data-magicpath-path="PerformanceTrackerApp.tsx">
         <motion.div initial={{
         opacity: 0,
@@ -88,7 +89,7 @@ const PerformanceTrackerApp: React.FC = () => {
         y: 0
       }} className="space-y-6" data-magicpath-id="2" data-magicpath-path="PerformanceTrackerApp.tsx">
           <MatteCard className="text-center p-8" variant="accent" data-magicpath-id="3" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#E20074] to-[#B91C5C] rounded-2xl flex items-center justify-center shadow-lg" data-magicpath-id="4" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#E20074] to-[#20074] rounded-2xl flex items-center justify-center shadow-lg" data-magicpath-id="4" data-magicpath-path="PerformanceTrackerApp.tsx">
               <Smartphone className="w-8 h-8 text-white" data-magicpath-id="5" data-magicpath-path="PerformanceTrackerApp.tsx" />
             </div>
             <h1 className="text-2xl font-display text-white mb-2" data-magicpath-id="6" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Tracker</h1>
@@ -102,7 +103,7 @@ const PerformanceTrackerApp: React.FC = () => {
           </div>
 
           <MatteCard className="p-6" variant="secondary" data-magicpath-id="10" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <button onClick={() => setCurrentScreen('dashboard')} className="w-full bg-gradient-to-r from-[#E20074] to-[#B91C5C] text-white py-4 rounded-xl font-heading text-lg flex items-center justify-center space-x-2 hover:from-[#C21E68] hover:to-[#A11A56] transition-all shadow-lg" data-magicpath-id="11" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <button onClick={() => setCurrentScreen('dashboard')} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-4 rounded-xl font-heading text-lg flex items-center justify-center space-x-2 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="11" data-magicpath-path="PerformanceTrackerApp.tsx">
               <span data-magicpath-id="12" data-magicpath-path="PerformanceTrackerApp.tsx">Get Started</span>
               <ArrowRight className="w-5 h-5" data-magicpath-id="13" data-magicpath-path="PerformanceTrackerApp.tsx" />
             </button>
@@ -110,7 +111,7 @@ const PerformanceTrackerApp: React.FC = () => {
         </motion.div>
       </div>
     </div>;
-  const renderDashboard = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="14" data-magicpath-path="PerformanceTrackerApp.tsx">
+  const renderDashboard = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4 pb-20" data-magicpath-id="14" data-magicpath-path="PerformanceTrackerApp.tsx">
       <div className="max-w-md mx-auto space-y-4" data-magicpath-id="15" data-magicpath-path="PerformanceTrackerApp.tsx">
         <div className="flex justify-between items-center pt-4 mb-6" data-magicpath-id="16" data-magicpath-path="PerformanceTrackerApp.tsx">
           <h1 className="text-2xl font-display text-white" data-magicpath-id="17" data-magicpath-path="PerformanceTrackerApp.tsx">Dashboard</h1>
@@ -153,7 +154,7 @@ const PerformanceTrackerApp: React.FC = () => {
             <p className="text-gray-400 italic mb-4 font-body" data-magicpath-id="38" data-magicpath-path="PerformanceTrackerApp.tsx">
               "Success is not final, failure is not fatal: it is the courage to continue that counts."
             </p>
-            <button onClick={() => setCurrentScreen('metrics')} className="bg-gradient-to-r from-[#E20074] to-[#B91C5C] text-white px-6 py-2 rounded-lg font-heading hover:from-[#C21E68] hover:to-[#A11A56] transition-all shadow-lg" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <button onClick={() => setCurrentScreen('metrics')} className="bg-gradient-to-r from-[#E20074] to-[#20074] text-white px-6 py-2 rounded-lg font-heading hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx">
               View Detailed Reports
             </button>
           </div>
@@ -169,50 +170,53 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "1522e351-c54e-47e5-b398-ff5b15a57554"
+          mpid: "727df7a9-ae35-421e-908a-0e7cc93af640"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "35bf58c6-8908-412f-9bfd-ac65bb21865f"
+          mpid: "43a698f1-6515-4bcd-bae1-b1eafaacabf6"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "fc71689d-a47a-442b-937f-5029a74a45ab"
+          mpid: "ab4271e4-b99c-4f8f-a6c0-2a4307225129"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "e9150b3b-9269-4049-8eb2-d2ade046a9a9"
+          mpid: "d59a503b-4b52-4502-a3d6-5071c863b3b1"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "26622f9b-2018-4443-9e1b-b47e3b0e3cd1"
+          mpid: "8adc49c4-dc14-45f6-b52d-aee3f7ef5863"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "5be8d9c0-68dd-4dd3-8fd5-47bdfb55b4db"
-        }].map((item, index) => <motion.div key={item.label} initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          delay: index * 0.1
-        }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="44" data-magicpath-path="PerformanceTrackerApp.tsx">
+          mpid: "f1f38cf2-72f1-4ab5-b6a7-04bd89a57958"
+        }].map((item, index) => {
+          const IconComponent = item.icon;
+          return <motion.div key={item.label} initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            delay: index * 0.1
+          }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="44" data-magicpath-path="PerformanceTrackerApp.tsx">
               <MatteCard className="p-6 h-32" variant="accent" hover data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="45" data-magicpath-path="PerformanceTrackerApp.tsx">
                 <button onClick={() => setCurrentScreen(item.screen)} className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white hover:text-[#E20074] transition-colors" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="46" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <item.icon className="w-8 h-8" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="47" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                  <IconComponent className="w-8 h-8" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="47" data-magicpath-path="PerformanceTrackerApp.tsx" />
                   <span className="text-sm font-caption text-center" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-field="label:unknown" data-magicpath-id="48" data-magicpath-path="PerformanceTrackerApp.tsx">
                     {item.label}
                   </span>
                 </button>
               </MatteCard>
-            </motion.div>)}
+            </motion.div>;
+        })}
         </div>
       </div>
     </div>;
@@ -264,7 +268,7 @@ const PerformanceTrackerApp: React.FC = () => {
 
         {uploadedImage && <MatteCard className="p-4" variant="secondary" data-magicpath-id="71" data-magicpath-path="PerformanceTrackerApp.tsx">
             <img src={uploadedImage} alt="Uploaded report" className="w-full h-48 object-cover rounded-lg mb-4" data-magicpath-id="72" data-magicpath-path="PerformanceTrackerApp.tsx" />
-            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#B91C5C] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#A11A56] transition-all shadow-lg" data-magicpath-id="73" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="73" data-magicpath-path="PerformanceTrackerApp.tsx">
               {isExtracting ? 'Extracting...' : 'Auto Extract Metrics'}
             </button>
           </MatteCard>}

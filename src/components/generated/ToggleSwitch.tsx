@@ -8,7 +8,6 @@ interface ToggleSwitchProps {
   rightLabel?: string;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'magenta' | 'glass';
   className?: string;
   mpid?: string;
 }
@@ -19,7 +18,6 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   rightLabel,
   disabled = false,
   size = 'md',
-  variant = 'magenta',
   className = ''
 }) => {
   const sizeClasses = {
@@ -42,63 +40,20 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       text: 'text-base'
     }
   };
-  const variantClasses = {
-    default: {
-      bg: checked ? 'bg-blue-600' : 'bg-gray-300',
-      thumb: 'bg-white',
-      shadow: 'shadow-md'
-    },
-    magenta: {
-      bg: checked ? 'bg-[#E20074]' : 'bg-gray-700/50',
-      thumb: 'bg-white',
-      shadow: 'shadow-lg shadow-[#E20074]/25'
-    },
-    glass: {
-      bg: checked ? 'bg-white/20 backdrop-blur-md' : 'bg-white/10 backdrop-blur-md',
-      thumb: checked ? 'bg-[#E20074]' : 'bg-white/80',
-      shadow: 'shadow-lg shadow-black/25'
-    }
-  };
   const sizes = sizeClasses[size];
-  const variants = variantClasses[variant];
-  const handleToggle = () => {
-    if (!disabled) {
-      onChange(!checked);
-    }
-  };
   return <div className={cn('flex items-center space-x-3', className)} data-magicpath-id="0" data-magicpath-path="ToggleSwitch.tsx">
-      {leftLabel && <span className={cn(sizes.text, 'font-medium transition-colors duration-200', !checked ? 'text-white' : 'text-gray-400', disabled && 'opacity-50')} data-magicpath-id="1" data-magicpath-path="ToggleSwitch.tsx">
+      {leftLabel && <span className={cn('font-medium transition-colors duration-200', sizes.text, !checked ? 'text-white' : 'text-gray-400')} data-magicpath-id="1" data-magicpath-path="ToggleSwitch.tsx">
           {leftLabel}
         </span>}
-
-      <button type="button" role="switch" aria-checked={checked} disabled={disabled} onClick={handleToggle} className={cn('relative inline-flex items-center rounded-full border-2 border-transparent transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-transparent', sizes.container, variants.bg, variants.shadow, disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:shadow-xl', variant === 'glass' && 'border-white/20')} data-magicpath-id="2" data-magicpath-path="ToggleSwitch.tsx">
-        <span className="sr-only" data-magicpath-id="3" data-magicpath-path="ToggleSwitch.tsx">
-          {leftLabel && rightLabel ? `Switch between ${leftLabel} and ${rightLabel}` : 'Toggle switch'}
-        </span>
-        
-        <motion.span className={cn('inline-block rounded-full transition-all duration-300 ease-in-out', sizes.thumb, variants.thumb, variants.shadow)} animate={{
-        x: checked ? sizes.translate.replace('translate-x-', '') : '0'
-      }} transition={{
-        type: "spring",
-        stiffness: 500,
-        damping: 30
-      }} style={{
-        filter: variant === 'magenta' && checked ? 'drop-shadow(0 0 8px rgba(226, 0, 116, 0.5))' : undefined
+      
+      <button type="button" role="switch" aria-checked={checked} disabled={disabled} onClick={() => !disabled && onChange(!checked)} className={cn('relative inline-flex shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:ring-offset-2 focus:ring-offset-gray-900', sizes.container, checked ? 'bg-gradient-to-r from-[#E20074] to-[#20074]' : 'bg-gray-700', disabled && 'opacity-50 cursor-not-allowed')} data-magicpath-id="2" data-magicpath-path="ToggleSwitch.tsx">
+        <span className="sr-only" data-magicpath-id="3" data-magicpath-path="ToggleSwitch.tsx">Toggle switch</span>
+        <motion.span layout className={cn('pointer-events-none inline-block rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 ease-in-out', sizes.thumb, checked ? sizes.translate : 'translate-x-0')} style={{
+        filter: checked ? 'drop-shadow(0 0 8px rgba(226, 0, 116, 0.4))' : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
       }} data-magicpath-id="4" data-magicpath-path="ToggleSwitch.tsx" />
-
-        {/* Glow effect for active state */}
-        {checked && variant === 'magenta' && <motion.div className="absolute inset-0 rounded-full bg-[#E20074] opacity-30" initial={{
-        scale: 1
-      }} animate={{
-        scale: [1, 1.1, 1]
-      }} transition={{
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }} data-magicpath-id="5" data-magicpath-path="ToggleSwitch.tsx" />}
       </button>
-
-      {rightLabel && <span className={cn(sizes.text, 'font-medium transition-colors duration-200', checked ? 'text-white' : 'text-gray-400', disabled && 'opacity-50')} data-magicpath-id="6" data-magicpath-path="ToggleSwitch.tsx">
+      
+      {rightLabel && <span className={cn('font-medium transition-colors duration-200', sizes.text, checked ? 'text-white' : 'text-gray-400')} data-magicpath-id="5" data-magicpath-path="ToggleSwitch.tsx">
           {rightLabel}
         </span>}
     </div>;
