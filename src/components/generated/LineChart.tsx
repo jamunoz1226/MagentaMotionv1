@@ -173,7 +173,7 @@ const LineChart: React.FC<LineChartProps> = ({
         <defs data-magicpath-id="20" data-magicpath-path="LineChart.tsx">
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%" data-magicpath-id="21" data-magicpath-path="LineChart.tsx">
             <stop offset="0%" stopColor="#E20074" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#8B5CF6" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="#20074" stopOpacity="0.9" />
             <stop offset="100%" stopColor="#06B6D4" stopOpacity="0.8" />
           </linearGradient>
           
