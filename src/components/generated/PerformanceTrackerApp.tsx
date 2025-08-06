@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Upload, Target, Calendar, BarChart3, TrendingUp, Smartphone, Award, ArrowRight, Camera, FileText, CheckCircle } from 'lucide-react';
+import { Home, Upload, Target, Calendar, BarChart3, TrendingUp, Smartphone, Award, ArrowRight, Camera, FileText, CheckCircle, X } from 'lucide-react';
 import GlassCard from './GlassCard';
 import ProgressRing from './ProgressRing';
 import ToggleSwitch from './ToggleSwitch';
 import BottomNavBar from './BottomNavBar';
+import LineChart from './LineChart';
 type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup';
 type ViewMode = 'MTD' | 'EOM';
 interface MetricData {
@@ -25,37 +26,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "dcd4e1e4-47a5-4ce9-bbee-f1fe2889c4a5"
+    mpid: "e194ac8f-c7f6-483c-8644-c322e1734d9a"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "06f1a1c8-f092-45c3-8b2c-405c77b3482b"
+    mpid: "dd1569c9-c6c9-47bb-b3de-7d95c5bbb5af"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "51099a14-5e39-42d6-93b5-2d2653c2855d"
+    mpid: "3d129d24-3418-4748-907e-066e81151812"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "bfc66e69-ef92-4853-9fc7-82c1c64c28c0"
+    mpid: "886832c4-1d37-4681-a31f-527732ec611a"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "3254f505-e1ff-46bc-937f-31b00fb61b33"
+    mpid: "a5ea343a-7ac8-40ce-97e7-aa1543af28ba"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "7a23b3d8-4944-4013-b213-99b4a993b3f5"
+    mpid: "cb91c69f-000f-4ee8-9ebe-8fab9c7dfde2"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -142,8 +143,8 @@ const PerformanceTrackerApp: React.FC = () => {
 
         <GlassCard className="p-6" data-magicpath-id="32" data-magicpath-path="PerformanceTrackerApp.tsx">
           <h3 className="text-white font-semibold mb-4" data-magicpath-id="33" data-magicpath-path="PerformanceTrackerApp.tsx">Monthly Projection</h3>
-          <div className="h-32 bg-gradient-to-r from-[#E20074]/20 to-gray-600/20 rounded-lg flex items-center justify-center border border-gray-700" data-magicpath-id="34" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <p className="text-gray-400" data-magicpath-id="35" data-magicpath-path="PerformanceTrackerApp.tsx">Trend Chart Placeholder</p>
+          <div className="relative" data-magicpath-id="34" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <LineChart metrics={mockMetrics} data-magicpath-id="35" data-magicpath-path="PerformanceTrackerApp.tsx" />
           </div>
         </GlassCard>
 
@@ -168,32 +169,32 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "ca7a98ee-0a98-40e5-852a-b8c4272e34b2"
+          mpid: "df22561f-6937-4441-b7df-bffaf3596b16"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "c9928401-3266-4204-add4-f665077d75a5"
+          mpid: "4e8c741f-ab8f-4979-9fc5-8ab6466c23ce"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "4ec3d9ef-18a9-4711-9630-50aeaa1cfdb8"
+          mpid: "6954f45d-3f65-46f2-bd28-17c79efd3dff"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "51e1637f-99ac-4708-92b5-fb580d9406b8"
+          mpid: "646f9a5b-0048-4218-9520-b41f978073a5"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "42550bba-4f76-4d3e-a77c-4ceb5046208f"
+          mpid: "82880b1d-bdbd-403f-95da-84568cbc3929"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "63a386aa-d0b9-4ffb-bb23-dba2f7760f9f"
+          mpid: "7b7f3bb6-94dc-4ea7-b2e2-7e9e1a46fdfc"
         }].map((item, index) => <motion.div key={item.label} initial={{
           opacity: 0,
           y: 20
