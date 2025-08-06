@@ -28,31 +28,31 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     icon: Home,
     label: 'Home',
     activeScreens: ['home'],
-    mpid: "286430d1-3112-45ec-80ec-78b5d03da085"
+    mpid: "ec2ba464-9626-410f-ae0d-d4714bc3d0f1"
   }, {
     id: 'dashboard',
     icon: BarChart3,
     label: 'Dashboard',
     activeScreens: ['dashboard'],
-    mpid: "1a8d1230-35cb-4adb-8ab3-3a5ada59dc7a"
+    mpid: "09f30212-f82c-43ea-beeb-805277963fb5"
   }, {
     id: 'upload',
     icon: Upload,
     label: 'Upload',
     activeScreens: ['upload'],
-    mpid: "7c917e98-a1c6-42e8-991f-3b41bfc2d2ab"
+    mpid: "c25f7f05-7047-407a-ab66-890084ddad4e"
   }, {
     id: 'metrics',
     icon: TrendingUp,
     label: 'Metrics',
     activeScreens: ['metrics'],
-    mpid: "6b4402ec-1cd6-47a0-bdd8-06e042d6d903"
+    mpid: "46f0bc49-624a-4fc0-96a8-ed0264bd8577"
   }, {
     id: 'goals',
     icon: Target,
     label: 'Goals',
     activeScreens: ['goals', 'daily', 'catchup'],
-    mpid: "dd48cf5a-37d7-4e15-a846-089e7121d989"
+    mpid: "73b06c1c-5e6a-4a59-adab-b4c8b8dcb870"
   }];
   const isActive = (item: NavItem) => {
     return item.activeScreens.includes(currentScreen) || item.id === currentScreen;
@@ -67,15 +67,15 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     duration: 0.3,
     ease: 'easeOut'
   }} className={cn('fixed bottom-0 left-0 right-0 z-40', className)} data-magicpath-id="0" data-magicpath-path="BottomNavBar.tsx">
-      {/* Glass background with blur effect */}
+      {/* Matte background */}
       <div className="relative" data-magicpath-id="1" data-magicpath-path="BottomNavBar.tsx">
-        {/* Background blur layer */}
-        <div className="absolute inset-0 bg-gray-900/30 backdrop-blur-xl" data-magicpath-id="2" data-magicpath-path="BottomNavBar.tsx" />
+        {/* Background layer */}
+        <div className="absolute inset-0 bg-gray-900/95 border-t border-gray-700/50" data-magicpath-id="2" data-magicpath-path="BottomNavBar.tsx" />
         
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-white/5 to-transparent" data-magicpath-id="3" data-magicpath-path="BottomNavBar.tsx" />
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/[0.02]" data-magicpath-id="3" data-magicpath-path="BottomNavBar.tsx" />
         
-        {/* Border glow */}
+        {/* Top highlight */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" data-magicpath-id="4" data-magicpath-path="BottomNavBar.tsx" />
         
         {/* Navigation content */}
@@ -98,7 +98,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
               ease: 'easeOut'
             }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="7" data-magicpath-path="BottomNavBar.tsx">
                   {/* Active background */}
-                  {active && <motion.div layoutId="activeTab" className="absolute inset-0 bg-[#E20074]/20 backdrop-blur-sm rounded-xl border border-white/10" transition={{
+                  {active && <motion.div layoutId="activeTab" className="absolute inset-0 bg-gradient-to-br from-[#E20074]/20 to-[#B91C5C]/20 rounded-xl border border-gray-600/30" transition={{
                 type: "spring",
                 stiffness: 500,
                 damping: 30
@@ -106,7 +106,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                   
                   {/* Icon container */}
                   <div className="relative z-10 mb-1" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="9" data-magicpath-path="BottomNavBar.tsx">
-                    <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(236,72,153,0.5)]')} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" />
+                    <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" />
                     
                     {/* Active indicator dot */}
                     {active && <motion.div initial={{
@@ -115,9 +115,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 }} animate={{
                   scale: 1,
                   opacity: 1
-                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full" style={{
-                  filter: 'drop-shadow(0 0 4px rgba(236, 72, 153, 0.8))'
-                }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
+                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#B91C5C] rounded-full shadow-lg" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
                   </div>
                   
                   {/* Label */}
@@ -126,7 +124,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                   </span>
                   
                   {/* Ripple effect on tap */}
-                  <motion.div className="absolute inset-0 rounded-xl bg-white/10" initial={{
+                  <motion.div className="absolute inset-0 rounded-xl bg-white/5" initial={{
                 scale: 0,
                 opacity: 0
               }} whileTap={{
