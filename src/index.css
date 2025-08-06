@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Arial&family=Helvetica&family=Times+New+Roman&family=Georgia&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Satoshi:wght@400&family=Inter:wght@400&display=swap');
 @import 'tailwindcss';
 
 @plugin "tailwindcss-animate";
@@ -14,6 +14,41 @@ body {
   min-height: 100vh;
   box-sizing: border-box;
   overflow: auto;
+  font-family: 'Satoshi', 'Inter', 'Manrope', system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Premium typography classes */
+.font-display {
+  font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.font-heading {
+  font-family: 'Satoshi', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.font-body {
+  font-family: 'Inter', 'Manrope', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.font-caption {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+/* Enhanced text rendering */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 @theme inline {
