@@ -28,31 +28,31 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     icon: Home,
     label: 'Home',
     activeScreens: ['home'],
-    mpid: "b37af548-e7f3-45cd-a840-d032280467d8"
+    mpid: "e794560f-a07e-4b62-b24d-4765cc06e91a"
   }, {
     id: 'dashboard',
     icon: BarChart3,
     label: 'Dashboard',
     activeScreens: ['dashboard'],
-    mpid: "8282883d-b621-460e-9ed0-62bb3421ce1b"
+    mpid: "71a3ca4b-7cd4-4c90-b457-9464462086e9"
   }, {
     id: 'upload',
     icon: Upload,
     label: 'Upload',
     activeScreens: ['upload'],
-    mpid: "2067f29f-de9c-4cd3-aa00-539d05d6dafe"
+    mpid: "90ed2d54-a916-44dd-9e19-087573c73081"
   }, {
     id: 'metrics',
     icon: TrendingUp,
     label: 'Metrics',
     activeScreens: ['metrics'],
-    mpid: "ecba90c0-5a24-4f0f-a4bc-ac91db560c1f"
+    mpid: "529f3473-4a45-44f5-89a9-dd92ddfa8d4b"
   }, {
     id: 'goals',
     icon: Target,
     label: 'Goals',
     activeScreens: ['goals', 'daily', 'catchup'],
-    mpid: "e5e00958-9871-47b3-a55e-66b5a6059198"
+    mpid: "7e5220ee-2765-4906-acdb-912e30497e9e"
   }];
   const isActive = (item: NavItem) => {
     return item.activeScreens.includes(currentScreen) || item.id === currentScreen;
