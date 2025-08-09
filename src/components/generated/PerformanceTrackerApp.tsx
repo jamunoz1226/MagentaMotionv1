@@ -27,37 +27,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "63f8607f-6b83-4172-8551-6e9323fe3188"
+    mpid: "be8bb768-c90c-4246-be88-b06158a89c57"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "a5948538-d435-44aa-917f-2e6ebb60768b"
+    mpid: "490e947e-1bbd-409e-bed2-7662b8e972e9"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "6a256c79-eea2-4a00-9d9e-2edfc76c8957"
+    mpid: "1b262fb9-ccc9-4eb8-aa35-2ef38df1f487"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "bd86af4f-6e6c-4425-a066-b2d62e0e7116"
+    mpid: "0cd4b843-b1f8-4d7c-b786-499eb531942a"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "b6aa25f8-3f0a-4c90-924e-456d1972d4a4"
+    mpid: "e326bbce-f558-4403-88f2-fd442e3aa705"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "3b86f397-723c-49e1-b240-4495b890957c"
+    mpid: "187b6bd3-a218-4180-98ab-4e2416b5da71"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -170,32 +170,32 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "db2c08f3-2d66-4106-b8e6-67b2feee3197"
+          mpid: "d6c8289e-58f9-4c17-930f-0cc525a2eda7"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "fa6ed66b-e881-450f-89ee-99a6f6cc96c0"
+          mpid: "6bcfb362-76e0-4f15-8c37-6c4d686903ce"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "aae6ab98-d425-4306-94ea-5cc62a495baa"
+          mpid: "e14e5f29-7239-4cb1-a4fc-2a1e472c2b28"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "05fd4594-aa8e-42db-a764-3d2d87887c98"
+          mpid: "764b115e-4c42-4a44-8a18-cf18b404b030"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "ff1894b5-80a5-4eb2-886d-e064bea3b75d"
+          mpid: "8edbd191-bc8a-45c3-aa9d-531bf7a37bb0"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "adad0ece-80d7-4145-8525-714295cc1261"
+          mpid: "05203223-acf4-46fc-9b20-4b3ccc5aa78b"
         }].map((item, index) => {
           const IconComponent = item.icon;
           return <motion.div key={item.label} initial={{
@@ -270,25 +270,57 @@ const PerformanceTrackerApp: React.FC = () => {
             
             <div className="text-center" data-magicpath-id="72" data-magicpath-path="PerformanceTrackerApp.tsx">
               <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="image-upload" data-magicpath-id="73" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <label htmlFor="image-upload" className="cursor-pointer block p-8 border-2 border-dashed border-gray-600 rounded-lg hover:border-[#E20074] hover:bg-gray-800/30 transition-all" data-magicpath-id="74" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <Camera className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                <p className="text-gray-400" data-magicpath-id="75" data-magicpath-path="PerformanceTrackerApp.tsx">Tap to upload report image</p>
+              <label htmlFor="image-upload" className="cursor-pointer block p-8 border-2 border-dashed border-gray-600 rounded-lg hover:border-[#E20074] hover:bg-gray-800/30 transition-all group" data-magicpath-id="74" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <motion.div initial={{
+                scale: 1
+              }} whileHover={{
+                scale: 1.05
+              }} whileTap={{
+                scale: 0.95
+              }} className="flex flex-col items-center" data-magicpath-id="75" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <motion.div animate={{
+                  y: [0, -8, 0],
+                  rotate: [0, 5, -5, 0]
+                }} transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }} className="mb-4" data-magicpath-id="76" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <Camera className="w-12 h-12 text-gray-500 group-hover:text-[#E20074] transition-colors duration-300" />
+                  </motion.div>
+                  <motion.p className="text-gray-400 group-hover:text-white transition-colors duration-300 font-medium" animate={{
+                  opacity: [0.7, 1, 0.7]
+                }} transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }} data-magicpath-id="77" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    Tap to upload report image
+                  </motion.p>
+                  <motion.div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-[#E20074] to-transparent opacity-0 group-hover:opacity-100" initial={{
+                  scaleX: 0
+                }} whileHover={{
+                  scaleX: 1
+                }} transition={{
+                  duration: 0.3
+                }} data-magicpath-id="78" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                </motion.div>
               </label>
             </div>
           </div>
         </MatteCard>
 
-        {uploadedImage && <MatteCard className="p-4" variant="secondary" data-magicpath-id="76" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <img src={uploadedImage} alt="Uploaded report" className="w-full h-48 object-cover rounded-lg mb-4" data-magicpath-id="77" data-magicpath-path="PerformanceTrackerApp.tsx" />
-            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="78" data-magicpath-path="PerformanceTrackerApp.tsx">
+        {uploadedImage && <MatteCard className="p-4" variant="secondary" data-magicpath-id="79" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <img src={uploadedImage} alt="Uploaded report" className="w-full h-48 object-cover rounded-lg mb-4" data-magicpath-id="80" data-magicpath-path="PerformanceTrackerApp.tsx" />
+            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="81" data-magicpath-path="PerformanceTrackerApp.tsx">
               {isExtracting ? 'Extracting...' : 'Auto Extract Metrics'}
             </button>
           </MatteCard>}
 
-        {isExtracting && <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" data-magicpath-id="79" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <MatteCard className="p-8 text-center" variant="accent" data-magicpath-id="80" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <div className="animate-spin w-8 h-8 border-2 border-[#E20074] border-t-transparent rounded-full mx-auto mb-4" data-magicpath-id="81" data-magicpath-path="PerformanceTrackerApp.tsx"></div>
-              <p className="text-white" data-magicpath-id="82" data-magicpath-path="PerformanceTrackerApp.tsx">Processing image...</p>
+        {isExtracting && <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" data-magicpath-id="82" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <MatteCard className="p-8 text-center" variant="accent" data-magicpath-id="83" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <div className="animate-spin w-8 h-8 border-2 border-[#E20074] border-t-transparent rounded-full mx-auto mb-4" data-magicpath-id="84" data-magicpath-path="PerformanceTrackerApp.tsx"></div>
+              <p className="text-white" data-magicpath-id="85" data-magicpath-path="PerformanceTrackerApp.tsx">Processing image...</p>
             </MatteCard>
           </div>}
       </div>
@@ -309,8 +341,8 @@ const PerformanceTrackerApp: React.FC = () => {
         return renderHomeNavigation();
     }
   };
-  return <div className="relative" data-magicpath-id="83" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <AnimatePresence mode="wait" data-magicpath-id="84" data-magicpath-path="PerformanceTrackerApp.tsx">
+  return <div className="relative" data-magicpath-id="86" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <AnimatePresence mode="wait" data-magicpath-id="87" data-magicpath-path="PerformanceTrackerApp.tsx">
         <motion.div key={currentScreen} initial={{
         opacity: 0,
         x: 20
@@ -322,12 +354,12 @@ const PerformanceTrackerApp: React.FC = () => {
         x: -20
       }} transition={{
         duration: 0.3
-      }} data-magicpath-id="85" data-magicpath-path="PerformanceTrackerApp.tsx">
+      }} data-magicpath-id="88" data-magicpath-path="PerformanceTrackerApp.tsx">
           {renderCurrentScreen()}
         </motion.div>
       </AnimatePresence>
 
-      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="86" data-magicpath-path="PerformanceTrackerApp.tsx" />}
+      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="89" data-magicpath-path="PerformanceTrackerApp.tsx" />}
 
       {showToast && <motion.div initial={{
       opacity: 0,
@@ -338,11 +370,11 @@ const PerformanceTrackerApp: React.FC = () => {
     }} exit={{
       opacity: 0,
       y: 50
-    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="87" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <MatteCard className="p-4" variant="accent" data-magicpath-id="88" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div className="flex items-center space-x-3" data-magicpath-id="89" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="90" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <p className="text-white" data-magicpath-id="91" data-magicpath-path="PerformanceTrackerApp.tsx">Metrics extracted successfully!</p>
+    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="90" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <MatteCard className="p-4" variant="accent" data-magicpath-id="91" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div className="flex items-center space-x-3" data-magicpath-id="92" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="93" data-magicpath-path="PerformanceTrackerApp.tsx" />
+              <p className="text-white" data-magicpath-id="94" data-magicpath-path="PerformanceTrackerApp.tsx">Metrics extracted successfully!</p>
             </div>
           </MatteCard>
         </motion.div>}
