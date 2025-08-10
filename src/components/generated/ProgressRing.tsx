@@ -8,7 +8,6 @@ interface ProgressRingProps {
   showPercentage?: boolean;
   animate?: boolean;
   className?: string;
-  mpid?: string;
 }
 const ProgressRing: React.FC<ProgressRingProps> = ({
   percentage,

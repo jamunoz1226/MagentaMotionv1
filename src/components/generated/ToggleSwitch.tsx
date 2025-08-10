@@ -9,7 +9,6 @@ interface ToggleSwitchProps {
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  mpid?: string;
 }
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   checked,

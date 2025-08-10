@@ -9,11 +9,9 @@ interface MetricData {
   actual: number;
   target: number;
   category: 'Sales' | 'Attach' | 'Customer' | 'Quality';
-  mpid?: string;
 }
 interface LineChartProps {
   metrics: MetricData[];
-  mpid?: string;
 }
 interface DetailCardProps {
   metric: MetricData;
@@ -22,7 +20,6 @@ interface DetailCardProps {
     y: number;
   };
   onClose: () => void;
-  mpid?: string;
 }
 const DetailCard: React.FC<DetailCardProps> = ({
   metric,
@@ -237,7 +234,7 @@ const LineChart: React.FC<LineChartProps> = ({
       })}
 
         {/* X-axis labels */}
-        {dataPoints.map((point, index) => <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-uuid={(point as any)["mpid"] ?? "unsafe"} data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
+        {dataPoints.map((point, index) => <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
             {point.name.split(' ')[0]}
           </text>)}
 
@@ -265,17 +262,17 @@ const LineChart: React.FC<LineChartProps> = ({
         }} transition={{
           delay: index * 0.2 + 0.5,
           duration: 0.4
-        }} data-magicpath-uuid={(point as any)["mpid"] ?? "unsafe"} data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
+        }} data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
               {/* Outer glow ring */}
-              <circle cx={point.x} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-uuid={(point as any)["mpid"] ?? "unsafe"} data-magicpath-id="39" data-magicpath-path="LineChart.tsx" />
+              <circle cx={point.x} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-id="39" data-magicpath-path="LineChart.tsx" />
               
               {/* Main dot */}
               <circle cx={point.x} cy={point.y} r="5" fill={dotColor} className="cursor-pointer hover:scale-110 transition-transform" onClick={e => handleDotClick(point, e)} style={{
             filter: `drop-shadow(0 0 6px ${dotColor}40)`
-          }} data-magicpath-uuid={(point as any)["mpid"] ?? "unsafe"} data-magicpath-id="40" data-magicpath-path="LineChart.tsx" />
+          }} data-magicpath-id="40" data-magicpath-path="LineChart.tsx" />
               
               {/* Inner highlight */}
-              <circle cx={point.x} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-uuid={(point as any)["mpid"] ?? "unsafe"} data-magicpath-id="41" data-magicpath-path="LineChart.tsx" />
+              <circle cx={point.x} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-id="41" data-magicpath-path="LineChart.tsx" />
             </motion.g>;
       })}
       </svg>

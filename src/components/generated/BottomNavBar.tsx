@@ -10,13 +10,11 @@ interface NavItem {
   }>;
   label: string;
   activeScreens: Screen[];
-  mpid?: string;
 }
 interface BottomNavBarProps {
   currentScreen: Screen;
   onNavigate: (screen: Screen) => void;
   className?: string;
-  mpid?: string;
 }
 const BottomNavBar: React.FC<BottomNavBarProps> = ({
   currentScreen,
@@ -27,32 +25,27 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     id: 'dashboard',
     icon: BarChart3,
     label: 'Dashboard',
-    activeScreens: ['dashboard'],
-    mpid: "b24a6b2e-3f89-411a-9efd-9d98f1b3d7da"
+    activeScreens: ['dashboard']
   }, {
     id: 'upload',
     icon: Upload,
     label: 'Upload',
-    activeScreens: ['upload'],
-    mpid: "64ccbcd0-7939-4bea-a908-74604f8c583c"
+    activeScreens: ['upload']
   }, {
     id: 'metrics',
     icon: TrendingUp,
     label: 'Metrics',
-    activeScreens: ['metrics'],
-    mpid: "67673d0f-6e3b-4e5e-9cb7-4427a9071509"
+    activeScreens: ['metrics']
   }, {
     id: 'catchup',
     icon: Target,
     label: 'Catch-Up',
-    activeScreens: ['catchup'],
-    mpid: "31518d9f-65b6-4b68-9f7d-716116524d9f"
+    activeScreens: ['catchup']
   }, {
     id: 'daily',
     icon: Home,
     label: 'Shift',
-    activeScreens: ['daily'],
-    mpid: "7d5d01dc-cef7-4ba0-a94f-e174a17ccc16"
+    activeScreens: ['daily']
   }];
   const isActive = (item: NavItem) => {
     return item.activeScreens.includes(currentScreen) || item.id === currentScreen;
@@ -96,17 +89,17 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
               duration: 0.3,
               delay: index * 0.05,
               ease: 'easeOut'
-            }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="7" data-magicpath-path="BottomNavBar.tsx">
+            }} data-magicpath-id="7" data-magicpath-path="BottomNavBar.tsx">
                   {/* Active background */}
                   {active && <motion.div layoutId="activeTab" className="absolute inset-0 bg-gradient-to-br from-[#E20074]/20 to-[#20074]/20 rounded-xl border border-gray-600/30" transition={{
                 type: "spring",
                 stiffness: 500,
                 damping: 30
-              }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="8" data-magicpath-path="BottomNavBar.tsx" />}
+              }} data-magicpath-id="8" data-magicpath-path="BottomNavBar.tsx" />}
                   
                   {/* Icon container */}
-                  <div className="relative z-10 mb-1" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="9" data-magicpath-path="BottomNavBar.tsx">
-                    <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" />
+                  <div className="relative z-10 mb-1" data-magicpath-id="9" data-magicpath-path="BottomNavBar.tsx">
+                    <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" />
                     
                     {/* Active indicator dot */}
                     {active && <motion.div initial={{
@@ -115,11 +108,11 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 }} animate={{
                   scale: 1,
                   opacity: 1
-                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full shadow-lg" data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
+                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full shadow-lg" data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
                   </div>
                   
                   {/* Label */}
-                  <span className={cn('text-xs font-medium transition-all duration-300 relative z-10', active ? 'text-white font-semibold' : 'text-gray-400')} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-field="label:string" data-magicpath-id="12" data-magicpath-path="BottomNavBar.tsx">
+                  <span className={cn('text-xs font-medium transition-all duration-300 relative z-10', active ? 'text-white font-semibold' : 'text-gray-400')} data-magicpath-id="12" data-magicpath-path="BottomNavBar.tsx">
                     {item.label}
                   </span>
                   
@@ -132,7 +125,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 opacity: 0.3
               }} transition={{
                 duration: 0.2
-              }} data-magicpath-uuid={(item as any)["mpid"] ?? "unsafe"} data-magicpath-id="13" data-magicpath-path="BottomNavBar.tsx" />
+              }} data-magicpath-id="13" data-magicpath-path="BottomNavBar.tsx" />
                 </motion.button>;
           })}
           </nav>
