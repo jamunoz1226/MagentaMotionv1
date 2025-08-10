@@ -299,9 +299,25 @@ const LineChart: React.FC<LineChartProps> = ({
       })}
 
         {/* X-axis labels */}
-        {dataPoints.map((point, index) => <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
-            {point.displayLabel}
-          </text>)}
+        {dataPoints.map((point, index) => {
+        const words = point.displayLabel.split(' ');
+        if (words.length > 1) {
+          // Multi-word labels: split into two lines
+          return <g key={index} data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
+                <text x={point.x} y={chartHeight - 16} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="37" data-magicpath-path="LineChart.tsx">
+                  {words[0]}
+                </text>
+                <text x={point.x} y={chartHeight - 6} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
+                  {words.slice(1).join(' ')}
+                </text>
+              </g>;
+        } else {
+          // Single word labels: keep on one line
+          return <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="39" data-magicpath-path="LineChart.tsx">
+                {point.displayLabel}
+              </text>;
+        }
+      })}
 
         {/* Animated line path */}
         <motion.path d={createSmoothPath(dataPoints)} fill="none" stroke={`url(#${gradientId})`} strokeWidth="3" filter={`url(#${glowId})`} initial={{
@@ -311,7 +327,7 @@ const LineChart: React.FC<LineChartProps> = ({
       }} transition={{
         duration: 2,
         ease: "easeInOut"
-      }} data-magicpath-id="37" data-magicpath-path="LineChart.tsx" />
+      }} data-magicpath-id="40" data-magicpath-path="LineChart.tsx" />
 
         {/* Animated dots */}
         {dataPoints.map((point, index) => {
@@ -327,34 +343,34 @@ const LineChart: React.FC<LineChartProps> = ({
         }} transition={{
           delay: index * 0.2 + 0.5,
           duration: 0.4
-        }} data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
+        }} data-magicpath-id="41" data-magicpath-path="LineChart.tsx">
               {/* Outer glow ring */}
-              <circle cx={point.x} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-id="39" data-magicpath-path="LineChart.tsx" />
+              <circle cx={point.x} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-id="42" data-magicpath-path="LineChart.tsx" />
               
               {/* Main dot */}
               <circle cx={point.x} cy={point.y} r="5" fill={dotColor} className="cursor-pointer hover:scale-110 transition-transform" onClick={e => handleDotClick(point, e)} style={{
             filter: `drop-shadow(0 0 6px ${dotColor}40)`
-          }} data-magicpath-id="40" data-magicpath-path="LineChart.tsx" />
+          }} data-magicpath-id="43" data-magicpath-path="LineChart.tsx" />
               
               {/* Inner highlight */}
-              <circle cx={point.x} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-id="41" data-magicpath-path="LineChart.tsx" />
+              <circle cx={point.x} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-id="44" data-magicpath-path="LineChart.tsx" />
             </motion.g>;
       })}
       </svg>
 
       {/* Y-axis label */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 origin-center" data-magicpath-id="42" data-magicpath-path="LineChart.tsx">
-        <span className="text-xs text-gray-500 font-medium" data-magicpath-id="43" data-magicpath-path="LineChart.tsx">% to Target</span>
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 -rotate-90 origin-center" data-magicpath-id="45" data-magicpath-path="LineChart.tsx">
+        <span className="text-xs text-gray-500 font-medium" data-magicpath-id="46" data-magicpath-path="LineChart.tsx">% to Target</span>
       </div>
 
       {/* X-axis label */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4" data-magicpath-id="44" data-magicpath-path="LineChart.tsx">
-        <span className="text-xs text-gray-500 font-medium" data-magicpath-id="45" data-magicpath-path="LineChart.tsx">Metrics</span>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4" data-magicpath-id="47" data-magicpath-path="LineChart.tsx">
+        <span className="text-xs text-gray-500 font-medium" data-magicpath-id="48" data-magicpath-path="LineChart.tsx">Metrics</span>
       </div>
 
       {/* Detail card overlay */}
-      <AnimatePresence data-magicpath-id="46" data-magicpath-path="LineChart.tsx">
-        {selectedMetric && <DetailCard metric={selectedMetric} position={mousePosition} onClose={() => setSelectedMetric(null)} data-magicpath-id="47" data-magicpath-path="LineChart.tsx" />}
+      <AnimatePresence data-magicpath-id="49" data-magicpath-path="LineChart.tsx">
+        {selectedMetric && <DetailCard metric={selectedMetric} position={mousePosition} onClose={() => setSelectedMetric(null)} data-magicpath-id="50" data-magicpath-path="LineChart.tsx" />}
       </AnimatePresence>
     </div>;
 };
