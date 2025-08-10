@@ -92,6 +92,15 @@ const getInitialState = (): ShiftState => ({
 
 const clampToZero = (value: number): number => Math.max(0, value)
 
+// Debounce utility for auto-save
+let saveTimeout: NodeJS.Timeout | null = null
+const debouncedSave = (saveFunction: () => void) => {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout)
+  }
+  saveTimeout = setTimeout(saveFunction, 500)
+}
+
 const getNestedValue = (obj: any, path: string): number => {
   const keys = path.split('.')
   let current = obj
@@ -146,6 +155,7 @@ export const useShiftStore = create<ShiftStore>()(
       csatAvg: () => {
         const state = get()
         const { csatScore, csatCount } = state.incremental
+        // Avoid NaN - return 0 if csatCount is 0
         return csatCount > 0 ? csatScore / csatCount : 0
       },
 
@@ -164,6 +174,9 @@ export const useShiftStore = create<ShiftStore>()(
           
           return newState
         })
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       dec: (metricPath: string) => {
@@ -171,15 +184,19 @@ export const useShiftStore = create<ShiftStore>()(
           const newState = { ...state }
           const currentValue = getNestedValue(newState, metricPath)
           
-          // Special handling for csatScore - allow decimals
+          // Special handling for csatScore - allow decimals, clamp to 0
           if (metricPath === 'incremental.csatScore') {
-            setNestedValue(newState, metricPath, currentValue - 0.1)
+            setNestedValue(newState, metricPath, Math.max(0, currentValue - 0.1))
           } else {
-            setNestedValue(newState, metricPath, currentValue - 1)
+            // Clamp all other values to 0 (integers)
+            setNestedValue(newState, metricPath, Math.max(0, currentValue - 1))
           }
           
           return newState
         })
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       setTarget: (code: string, value: number) => {
@@ -203,6 +220,9 @@ export const useShiftStore = create<ShiftStore>()(
             }
           };
         });
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       syncTargetsFromCatchUp: (targetMap: Record<string, number>) => {
@@ -215,6 +235,9 @@ export const useShiftStore = create<ShiftStore>()(
             )
           }
         }))
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       startShift: () => {
@@ -223,6 +246,9 @@ export const useShiftStore = create<ShiftStore>()(
           startedAt: Date.now(),
           date: new Date().toISOString().split('T')[0]
         }))
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       endShift: () => {
@@ -230,6 +256,9 @@ export const useShiftStore = create<ShiftStore>()(
           ...state,
           lastSavedAt: Date.now()
         }))
+        
+        // Save immediately on shift end
+        get().saveToLocal()
       },
 
       resetShift: (keepDate = false) => {
@@ -240,11 +269,14 @@ export const useShiftStore = create<ShiftStore>()(
           targets: state.targets, // Preserve targets
           deficits: state.deficits // Preserve deficits
         }))
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
       },
 
       saveToLocal: () => {
         const state = get()
-        const key = `shift-${state.date}`
+        const key = `shift:${state.date}` // Updated key format
         const dataToSave = {
           ...state,
           lastSavedAt: Date.now()
@@ -259,7 +291,7 @@ export const useShiftStore = create<ShiftStore>()(
       },
 
       loadFromLocal: (date: string) => {
-        const key = `shift-${date}`
+        const key = `shift:${date}` // Updated key format
         
         try {
           const saved = localStorage.getItem(key)
@@ -287,7 +319,25 @@ export const useShiftStore = create<ShiftStore>()(
 
       exportJSON: () => {
         const state = get()
-        return JSON.stringify(state, null, 2)
+        const dataToExport = {
+          ...state,
+          exportedAt: new Date().toISOString()
+        }
+        
+        // Create and trigger download
+        const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
+          type: 'application/json'
+        })
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `shift-${state.date}.json`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        URL.revokeObjectURL(url)
+        
+        return JSON.stringify(dataToExport, null, 2)
       }
     }),
     {
