@@ -8,6 +8,7 @@ import MatteCard from './GlassCard';
 import CounterRow from './CounterRow';
 import KeypadModal from './KeypadModal';
 import MotivationCard from './MotivationCard';
+import ShiftSummaryModal from './ShiftSummaryModal';
 import { useShiftStore } from './stores-useShiftStore';
 interface ShiftViewProps {
   onNavigateToCatchUp?: (metric?: string) => void;
@@ -36,6 +37,7 @@ export default function ShiftView({
   const [isRunning, setIsRunning] = useState(false);
   const [showKeypad, setShowKeypad] = useState(false);
   const [showMotivation, setShowMotivation] = useState(false);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [motivationData, setMotivationData] = useState({
     metric: '',
     remaining: 0,
@@ -69,6 +71,10 @@ export default function ShiftView({
     shiftStore.endShift();
     setIsRunning(false);
     setSessionTimer(0);
+    setShowSummaryModal(true);
+  };
+  const handleFinishShift = () => {
+    setShowSummaryModal(true);
   };
   const handleIncrement = (metricPath: string) => {
     shiftStore.inc(metricPath);
@@ -138,6 +144,19 @@ export default function ShiftView({
     return Math.round(totalProgress / metricsWithTargets.length);
   };
   const overallProgress = calculateOverallProgress();
+
+  // Calculate summary data for modal
+  const calculateSummaryData = () => {
+    const totalActivations = shiftStore.activations.voice + shiftStore.activations.bts + shiftStore.activations.tfb;
+    const totalIncremental = shiftStore.incremental.p360 + shiftStore.incremental.acc + shiftStore.incremental.devices;
+    const averageSurveyScore = shiftStore.csatAvg();
+    return {
+      totalActivations,
+      totalIncremental,
+      averageSurveyScore
+    };
+  };
+  const summaryData = calculateSummaryData();
   const CSATRow = () => {
     const csatAvg = shiftStore.csatAvg();
     const csatCount = shiftStore.incremental.csatCount;
@@ -278,9 +297,9 @@ export default function ShiftView({
                 <Save className="w-4 h-4" data-magicpath-id="73" data-magicpath-path="ShiftView.tsx" />
                 <span data-magicpath-id="74" data-magicpath-path="ShiftView.tsx">Quick Save</span>
               </button>
-              <button onClick={handleEndShift} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] rounded-xl text-white font-medium transition-all shadow-lg" data-magicpath-id="75" data-magicpath-path="ShiftView.tsx">
+              <button onClick={handleFinishShift} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] rounded-xl text-white font-medium transition-all shadow-lg" data-magicpath-id="75" data-magicpath-path="ShiftView.tsx">
                 <Target className="w-4 h-4" data-magicpath-id="76" data-magicpath-path="ShiftView.tsx" />
-                <span data-magicpath-id="77" data-magicpath-path="ShiftView.tsx">End Shift & Review</span>
+                <span data-magicpath-id="77" data-magicpath-path="ShiftView.tsx">Finish Shift</span>
               </button>
             </div>
 
@@ -293,5 +312,8 @@ export default function ShiftView({
           </div>
         </MatteCard>
       </div>
+
+      {/* Shift Summary Modal */}
+      <ShiftSummaryModal isOpen={showSummaryModal} onClose={() => setShowSummaryModal(false)} totalActivations={summaryData.totalActivations} totalIncremental={summaryData.totalIncremental} averageSurveyScore={summaryData.averageSurveyScore} shiftHours={shiftStore.shiftHours} data-magicpath-id="80" data-magicpath-path="ShiftView.tsx" />
     </div>;
 }
