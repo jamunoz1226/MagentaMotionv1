@@ -166,7 +166,7 @@ export default function ShiftView({
         </div>
       </div>;
   };
-  return <div className="min-h-screen bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4 pb-32" data-magicpath-id="11" data-magicpath-path="ShiftView.tsx">
+  return <div className="min-h-screen bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4 pb-80" data-magicpath-id="11" data-magicpath-path="ShiftView.tsx">
       <div className="max-w-md mx-auto space-y-4" data-magicpath-id="12" data-magicpath-path="ShiftView.tsx">
         {/* Header */}
         <div className="flex items-center justify-between pt-4 mb-6" data-magicpath-id="13" data-magicpath-path="ShiftView.tsx">
