@@ -30,37 +30,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "e3979ee5-78c3-4af1-a418-ef3df125203e"
+    mpid: "2bd1e54e-332a-49d0-8629-45365e901e4e"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "5b488640-d705-4c7a-9921-746622d9b7ca"
+    mpid: "da622408-7fe9-4b32-aa98-6376cf65270e"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "17a679ff-5bde-4499-8de1-68e4189b44eb"
+    mpid: "4ae368c5-d3bc-4da5-b7c7-4d87959e5cf2"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "fc97f7b8-6854-42af-9bbe-d9634329e1e1"
+    mpid: "5b4adc36-0edd-4096-9427-4db2f1e63d06"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "a34b4ef8-4567-4168-9c2f-17d08717821c"
+    mpid: "b9b5291c-34c7-4df6-9b5d-84e304b0fa9e"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "8e59972c-45d4-4cbd-a35a-63b149e8a934"
+    mpid: "7811cee4-2586-4a81-ada4-66affa326703"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -83,25 +83,25 @@ const PerformanceTrackerApp: React.FC = () => {
         actual: 42500,
         target: 50000,
         category: 'Sales',
-        mpid: "d160c2d6-ff24-46c7-a32b-3fa61c889a54"
+        mpid: "ed905085-1ed1-4cf6-bff4-afbd5090a2b9"
       }, {
         name: 'New Lines',
         actual: 25,
         target: 35,
         category: 'Sales',
-        mpid: "e998992c-dd20-4db7-8961-743ee5f2f56b"
+        mpid: "39cc3677-8163-46b5-92b0-33ffda5471b9"
       }, {
         name: 'Accessories',
         actual: 18,
         target: 20,
         category: 'Attach',
-        mpid: "c1cf0dc7-dd50-49e0-b344-c1563e70df91"
+        mpid: "8be0dc3f-0aa6-41f2-b0f2-cbd5bb8f08ed"
       }, {
         name: 'Insurance',
         actual: 20,
         target: 25,
         category: 'Attach',
-        mpid: "71818191-a335-4d53-9f4e-7e54f9dd1cda"
+        mpid: "7389c710-1aea-4dc4-9d20-bd78a479286b"
       }];
       setIsExtracting(false);
       setExtractedData(mockExtractedData);
@@ -241,32 +241,32 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "e9b8f2b0-7eda-4935-9ea7-c3607c77311c"
+          mpid: "f966e08d-758b-4f5c-b47d-d06817607293"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "98ac5e03-b088-40c4-b9f5-e74949dcbe27"
+          mpid: "924050ee-e02f-4c7d-b93c-98848949c6ee"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "cd115f5e-8a0a-46d5-810e-964443868569"
+          mpid: "66588808-d77a-4fcd-8edf-2353f299df16"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "f183df01-a79a-4fe6-86e5-c46250316973"
+          mpid: "9861c167-69df-4dbd-ae77-219e60a195c0"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "bfa154df-1dc5-410a-bdc6-23a83dc0c308"
+          mpid: "75492b2f-3fd9-4b22-9bd6-d501a4e89713"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "3c8f8bac-0cc7-4538-8408-e844d5a34657"
+          mpid: "a64b1fee-d81d-4bbe-bf7b-b433843e1267"
         }].map((item, index) => {
           const IconComponent = item.icon;
           return <motion.div key={item.label} initial={{
