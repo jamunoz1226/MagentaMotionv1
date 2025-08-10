@@ -11,7 +11,6 @@ interface MatteCardProps {
   hover?: boolean;
   onClick?: () => void;
   animate?: boolean;
-  mpid?: string;
 }
 const MatteCard: React.FC<MatteCardProps> = ({
   children,
