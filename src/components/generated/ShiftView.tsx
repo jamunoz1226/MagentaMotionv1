@@ -45,20 +45,12 @@ export default function ShiftView({
   // Timer effect
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (isRunning && shiftStore.startedAt) {
+    if (shiftStore.startedAt) {
       interval = setInterval(() => {
         setSessionTimer(Math.floor((Date.now() - shiftStore.startedAt!) / 1000));
       }, 1000);
     }
     return () => clearInterval(interval);
-  }, [isRunning, shiftStore.startedAt]);
-
-  // Initialize timer on mount if shift is already started
-  useEffect(() => {
-    if (shiftStore.startedAt) {
-      setSessionTimer(Math.floor((Date.now() - shiftStore.startedAt) / 1000));
-      setIsRunning(true);
-    }
   }, [shiftStore.startedAt]);
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -84,6 +76,17 @@ export default function ShiftView({
   };
   const handleDecrement = (metricPath: string) => {
     shiftStore.dec(metricPath);
+  };
+  const handleShiftHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value === '') {
+      shiftStore.setShiftHours(null);
+    } else {
+      const hours = parseFloat(value);
+      if (!isNaN(hours) && hours >= 0) {
+        shiftStore.setShiftHours(hours);
+      }
+    }
   };
   const showMotivationMessage = (metricPath: string) => {
     const metric = metricPath.split('.')[1] || metricPath;
@@ -168,18 +171,20 @@ export default function ShiftView({
         {/* Header */}
         <div className="flex items-center justify-between pt-4 mb-6" data-magicpath-id="13" data-magicpath-path="ShiftView.tsx">
           <h1 className="text-2xl font-display text-white" data-magicpath-id="14" data-magicpath-path="ShiftView.tsx">Shift</h1>
-          <div className="flex items-center space-x-3" data-magicpath-id="15" data-magicpath-path="ShiftView.tsx">
-            <div className="px-3 py-1 bg-gray-800/50 rounded-full text-sm text-gray-300" data-magicpath-id="16" data-magicpath-path="ShiftView.tsx">
-              {shiftStore.date}
-            </div>
-            <div className="flex items-center space-x-2" data-magicpath-id="17" data-magicpath-path="ShiftView.tsx">
-              <Clock className="w-4 h-4 text-gray-400" data-magicpath-id="18" data-magicpath-path="ShiftView.tsx" />
-              <span className="text-white font-mono text-sm" data-magicpath-id="19" data-magicpath-path="ShiftView.tsx">
-                {formatTime(sessionTimer)}
-              </span>
-            </div>
+          <div className="px-3 py-1 bg-gray-800/50 rounded-full text-sm text-gray-300" data-magicpath-id="15" data-magicpath-path="ShiftView.tsx">
+            {shiftStore.date}
           </div>
         </div>
+
+        {/* Shift Hours Input */}
+        <MatteCard className="p-4" variant="primary" data-magicpath-id="16" data-magicpath-path="ShiftView.tsx">
+          <div className="space-y-2" data-magicpath-id="17" data-magicpath-path="ShiftView.tsx">
+            <label htmlFor="shift-hours" className="block text-sm font-medium text-white" data-magicpath-id="18" data-magicpath-path="ShiftView.tsx">
+              Shift Hours
+            </label>
+            <input id="shift-hours" type="number" step="0.5" min="0" max="24" placeholder="e.g., 8.5" value={shiftStore.shiftHours || ''} onChange={handleShiftHoursChange} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent transition-colors" data-magicpath-id="19" data-magicpath-path="ShiftView.tsx" />
+          </div>
+        </MatteCard>
 
         {/* Session Controls */}
         <MatteCard className="p-4" variant="primary" data-magicpath-id="20" data-magicpath-path="ShiftView.tsx">

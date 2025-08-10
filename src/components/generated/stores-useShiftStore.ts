@@ -40,6 +40,7 @@ export interface ShiftDeficits {
 export interface ShiftState {
   date: string
   startedAt: number | null
+  shiftHours: number | null
   activations: ShiftActivations
   incremental: ShiftIncremental
   targets: ShiftTargets
@@ -59,6 +60,7 @@ export interface ShiftStore extends ShiftState {
   inc: (metricPath: string) => void
   dec: (metricPath: string) => void
   setTarget: (code: string, value: number) => void
+  setShiftHours: (hours: number | null) => void
   syncTargetsFromCatchUp: (targetMap: Record<string, number>) => void
   startShift: () => void
   endShift: () => void
@@ -71,6 +73,7 @@ export interface ShiftStore extends ShiftState {
 const getInitialState = (): ShiftState => ({
   date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
   startedAt: null,
+  shiftHours: null,
   activations: {
     voice: 0,
     bts: 0,
@@ -225,6 +228,16 @@ export const useShiftStore = create<ShiftStore>()(
         debouncedSave(() => get().saveToLocal())
       },
 
+      setShiftHours: (hours: number | null) => {
+        set((state) => ({
+          ...state,
+          shiftHours: hours
+        }))
+        
+        // Auto-save with debounce
+        debouncedSave(() => get().saveToLocal())
+      },
+
       syncTargetsFromCatchUp: (targetMap: Record<string, number>) => {
         set((state) => ({
           ...state,
@@ -345,6 +358,7 @@ export const useShiftStore = create<ShiftStore>()(
       partialize: (state) => ({
         date: state.date,
         startedAt: state.startedAt,
+        shiftHours: state.shiftHours,
         activations: state.activations,
         incremental: state.incremental,
         targets: state.targets,
