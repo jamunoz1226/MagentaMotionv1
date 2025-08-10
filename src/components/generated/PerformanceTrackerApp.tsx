@@ -200,7 +200,9 @@ const PerformanceTrackerApp: React.FC = () => {
           </div>
         </MatteCard>
 
-        <div className="grid grid-cols-2 gap-4" data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <div className="grid grid-cols-2 gap-4" data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx" style={{
+        display: "none"
+      }}>
           <MatteCard className="p-4" variant="secondary" data-magicpath-id="37" data-magicpath-path="PerformanceTrackerApp.tsx">
             <button onClick={() => setCurrentScreen('catchup')} className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white hover:text-[#E20074] transition-colors" data-magicpath-id="38" data-magicpath-path="PerformanceTrackerApp.tsx">
               <Calendar className="w-6 h-6" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx" />
