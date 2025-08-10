@@ -220,14 +220,18 @@ const LineChart: React.FC<LineChartProps> = ({
   };
 
   // Calculate percentages for each metric
-  const dataPoints = displayMetrics.map((metric, index) => ({
-    ...metric,
-    percentage: metric.actual / metric.target * 100,
-    x: index / (displayMetrics.length - 1) * plotWidth + padding.left,
-    y: chartHeight - padding.bottom - metric.actual / metric.target * plotHeight,
-    displayLabel: metricLabelMap[metric.name]?.short || metric.name.split(' ')[0],
-    fullName: metricLabelMap[metric.name]?.full || metric.name
-  }));
+  const dataPoints = displayMetrics.map((metric, index) => {
+    // Calculate evenly distributed positions across full chart width
+    const x = padding.left + index * plotWidth / (displayMetrics.length - 1);
+    return {
+      ...metric,
+      percentage: metric.actual / metric.target * 100,
+      x: x,
+      y: chartHeight - padding.bottom - metric.actual / metric.target * plotHeight,
+      displayLabel: metricLabelMap[metric.name]?.short || metric.name.split(' ')[0],
+      fullName: metricLabelMap[metric.name]?.full || metric.name
+    };
+  });
 
   // Create smooth curve path
   const createSmoothPath = (points: typeof dataPoints) => {
@@ -301,19 +305,21 @@ const LineChart: React.FC<LineChartProps> = ({
         {/* X-axis labels */}
         {dataPoints.map((point, index) => {
         const words = point.displayLabel.split(' ');
+        // Calculate evenly distributed positions across full chart width
+        const labelX = padding.left + index * plotWidth / (displayMetrics.length - 1);
         if (words.length > 1) {
           // Multi-word labels: split into two lines
           return <g key={index} data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
-                <text x={point.x} y={chartHeight - 16} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="37" data-magicpath-path="LineChart.tsx">
+                <text x={labelX} y={chartHeight - 16} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="37" data-magicpath-path="LineChart.tsx">
                   {words[0]}
                 </text>
-                <text x={point.x} y={chartHeight - 6} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
+                <text x={labelX} y={chartHeight - 6} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="38" data-magicpath-path="LineChart.tsx">
                   {words.slice(1).join(' ')}
                 </text>
               </g>;
         } else {
           // Single word labels: keep on one line
-          return <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="39" data-magicpath-path="LineChart.tsx">
+          return <text key={index} x={labelX} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="39" data-magicpath-path="LineChart.tsx">
                 {point.displayLabel}
               </text>;
         }
@@ -334,6 +340,8 @@ const LineChart: React.FC<LineChartProps> = ({
         const percentage = point.percentage;
         const status = percentage >= 90 ? 'excellent' : percentage >= 70 ? 'good' : 'needs-improvement';
         const dotColor = status === 'excellent' ? '#22C55E' : status === 'good' ? '#F59E0B' : '#EF4444';
+        // Calculate evenly distributed positions across full chart width
+        const dotX = padding.left + index * plotWidth / (displayMetrics.length - 1);
         return <motion.g key={index} initial={{
           scale: 0,
           opacity: 0
@@ -345,15 +353,15 @@ const LineChart: React.FC<LineChartProps> = ({
           duration: 0.4
         }} data-magicpath-id="41" data-magicpath-path="LineChart.tsx">
               {/* Outer glow ring */}
-              <circle cx={point.x} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-id="42" data-magicpath-path="LineChart.tsx" />
+              <circle cx={dotX} cy={point.y} r="8" fill="none" stroke={dotColor} strokeWidth="1" opacity="0.3" data-magicpath-id="42" data-magicpath-path="LineChart.tsx" />
               
               {/* Main dot */}
-              <circle cx={point.x} cy={point.y} r="5" fill={dotColor} className="cursor-pointer hover:scale-110 transition-transform" onClick={e => handleDotClick(point, e)} style={{
+              <circle cx={dotX} cy={point.y} r="5" fill={dotColor} className="cursor-pointer hover:scale-110 transition-transform" onClick={e => handleDotClick(point, e)} style={{
             filter: `drop-shadow(0 0 6px ${dotColor}40)`
           }} data-magicpath-id="43" data-magicpath-path="LineChart.tsx" />
               
               {/* Inner highlight */}
-              <circle cx={point.x} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-id="44" data-magicpath-path="LineChart.tsx" />
+              <circle cx={dotX} cy={point.y} r="2" fill="white" opacity="0.8" className="pointer-events-none" data-magicpath-id="44" data-magicpath-path="LineChart.tsx" />
             </motion.g>;
       })}
       </svg>
