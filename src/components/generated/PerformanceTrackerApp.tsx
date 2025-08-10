@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Upload, Target, Calendar, BarChart3, TrendingUp, Smartphone, Award, ArrowRight, Camera, FileText, CheckCircle, X, Info, ArrowUpDown, Settings } from 'lucide-react';
+import { Home, Upload, Target, Calendar, BarChart3, TrendingUp, Smartphone, Award, ArrowRight, Camera, FileText, CheckCircle, X } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import MatteCard from './GlassCard';
 import ProgressRing from './ProgressRing';
 import ToggleSwitch from './ToggleSwitch';
 import BottomNavBar from './BottomNavBar';
 import LineChart from './LineChart';
+import CatchUpView from './CatchUpView';
 import { useCatchUpStore } from './CatchUpStore';
-import { getFormulaDescription } from './CatchUpUtils';
-import CatchUpBottomSheet from './CatchUpBottomSheet';
 type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup';
 type ViewMode = 'MTD' | 'EOM';
 interface MetricData {
@@ -263,180 +262,92 @@ const PerformanceTrackerApp: React.FC = () => {
       <div className="max-w-md mx-auto space-y-4" data-magicpath-id="15" data-magicpath-path="PerformanceTrackerApp.tsx">
         {/* Header */}
         <div className="flex justify-between items-center pt-4 mb-6" data-magicpath-id="16" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <h1 className="text-2xl font-display text-white" data-magicpath-id="17" data-magicpath-path="PerformanceTrackerApp.tsx">Catch Up</h1>
+          <h1 className="text-2xl font-display text-white" data-magicpath-id="17" data-magicpath-path="PerformanceTrackerApp.tsx">Dashboard</h1>
           <ToggleSwitch checked={viewMode === 'EOM'} onChange={checked => setViewMode(checked ? 'EOM' : 'MTD')} leftLabel="MTD" rightLabel="EOM" data-magicpath-id="18" data-magicpath-path="PerformanceTrackerApp.tsx" />
         </div>
 
-        {/* Summary Card */}
-        <MatteCard className="p-6" variant="accent" data-magicpath-id="19" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <div className="flex items-center justify-between mb-4" data-magicpath-id="20" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div data-magicpath-id="21" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <h3 className="text-white font-heading text-lg" data-magicpath-id="22" data-magicpath-path="PerformanceTrackerApp.tsx">Overall Progress</h3>
-              <p className="text-gray-400 text-sm" data-magicpath-id="23" data-magicpath-path="PerformanceTrackerApp.tsx">
-                Projected EOM: {catchUpStore.state.projectedEom}%
-              </p>
-            </div>
-            <div className="text-right" data-magicpath-id="24" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <div className="text-2xl font-bold text-white" data-magicpath-id="25" data-magicpath-path="PerformanceTrackerApp.tsx">
-                {catchUpStore.state.overallProgress}%
-              </div>
-              <div className="text-xs text-gray-400" data-magicpath-id="26" data-magicpath-path="PerformanceTrackerApp.tsx">to target</div>
-            </div>
-          </div>
-          <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden" data-magicpath-id="27" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <motion.div initial={{
-            width: 0
-          }} animate={{
-            width: `${catchUpStore.state.overallProgress}%`
-          }} transition={{
-            duration: 1,
-            ease: "easeOut"
-          }} className="h-full bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full" data-magicpath-id="28" data-magicpath-path="PerformanceTrackerApp.tsx" />
-          </div>
-        </MatteCard>
-
-        {/* Controls Row */}
-        <MatteCard className="p-4" variant="secondary" data-magicpath-id="29" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <div className="space-y-4" data-magicpath-id="30" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div className="flex items-center justify-between mb-3" data-magicpath-id="31" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <h4 className="text-white font-medium" data-magicpath-id="32" data-magicpath-path="PerformanceTrackerApp.tsx">Calculation Controls</h4>
-              <button onClick={() => catchUpStore.updateSortBy(catchUpStore.state.sortBy === 'gap' ? 'priority' : 'gap')} className="flex items-center space-x-1 text-xs text-gray-400 hover:text-white transition-colors" data-magicpath-id="33" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <ArrowUpDown className="w-3 h-3" data-magicpath-id="34" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                <span data-magicpath-id="35" data-magicpath-path="PerformanceTrackerApp.tsx">Sort by {catchUpStore.state.sortBy === 'gap' ? 'Priority' : 'Gap'}</span>
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-3" data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <div data-magicpath-id="37" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="38" data-magicpath-path="PerformanceTrackerApp.tsx">Data Through Day</label>
-                <input type="number" value={catchUpStore.state.dataThroughDay} onChange={e => catchUpStore.updateControl('dataThroughDay', parseInt(e.target.value) || 0)} className="w-full px-2 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" min="1" max="31" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              </div>
-              <div data-magicpath-id="40" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="41" data-magicpath-path="PerformanceTrackerApp.tsx">Shifts Left</label>
-                <input type="number" value={catchUpStore.state.shiftsLeft} onChange={e => catchUpStore.updateControl('shiftsLeft', parseInt(e.target.value) || 0)} className="w-full px-2 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" min="0" data-magicpath-id="42" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              </div>
-              <div data-magicpath-id="43" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="44" data-magicpath-path="PerformanceTrackerApp.tsx">Catch-Up Day</label>
-                <input type="number" value={catchUpStore.state.catchUpDay} onChange={e => catchUpStore.updateControl('catchUpDay', parseInt(e.target.value) || 0)} className="w-full px-2 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" min="1" max="31" data-magicpath-id="45" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              </div>
-            </div>
-          </div>
-        </MatteCard>
-
-        {/* Priority List */}
-        <div className="space-y-3" data-magicpath-id="46" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <div className="flex items-center justify-between" data-magicpath-id="47" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <h3 className="text-white font-heading" data-magicpath-id="48" data-magicpath-path="PerformanceTrackerApp.tsx">Metrics Priority</h3>
-            <div className="text-xs text-gray-400" data-magicpath-id="49" data-magicpath-path="PerformanceTrackerApp.tsx">
-              Sorted by {catchUpStore.state.sortBy === 'gap' ? 'Gap' : 'Priority Score'}
-            </div>
-          </div>
-          
-          {catchUpStore.state.calculations.map((metric, index) => {
-          const statusColor = metric.status === 'On Track' ? 'text-green-400' : metric.status === 'Needs Focus' ? 'text-yellow-400' : 'text-red-400';
-          const statusBg = metric.status === 'On Track' ? 'bg-green-400/20' : metric.status === 'Needs Focus' ? 'bg-yellow-400/20' : 'bg-red-400/20';
-          return <motion.div key={metric.code} initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: index * 0.1
-          }} data-magicpath-id="50" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <MatteCard className="p-4" variant="primary" data-magicpath-id="51" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <div className="space-y-3" data-magicpath-id="52" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    {/* Header Row */}
-                    <div className="flex items-center justify-between" data-magicpath-id="53" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <div className="flex items-center space-x-2" data-magicpath-id="54" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div className="px-2 py-1 bg-[#E20074]/20 text-[#E20074] rounded text-xs font-mono" data-magicpath-id="55" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          {metric.code}
-                        </div>
-                        <div className="relative" data-magicpath-id="56" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <button onMouseEnter={() => setShowTooltip(metric.code)} onMouseLeave={() => setShowTooltip(null)} className="text-gray-400 hover:text-white transition-colors" data-magicpath-id="57" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            <Info className="w-3 h-3" data-magicpath-id="58" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                          </button>
-                          {showTooltip === metric.code && <div className="absolute bottom-full left-0 mb-2 p-2 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 whitespace-nowrap z-10" data-magicpath-id="59" data-magicpath-path="PerformanceTrackerApp.tsx">
-                              {metric.name}
-                            </div>}
-                        </div>
-                      </div>
-                      <div className={cn("px-2 py-1 rounded-full text-xs font-medium", statusBg, statusColor)} data-magicpath-id="60" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        {metric.status}
-                      </div>
+        {/* Top Performers */}
+        <div className="space-y-3" data-magicpath-id="19" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <h2 className="text-lg font-heading text-white" data-magicpath-id="20" data-magicpath-path="PerformanceTrackerApp.tsx">Top Performers</h2>
+          {topTwoMetrics.map((metric, index) => {
+          const percentage = Math.round(metric.actual / metric.target * 100);
+          const IconComponent = getMetricIcon(metric.name);
+          return <MatteCard key={metric.name} className="p-4" variant="accent" data-magicpath-id="21" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="flex items-center justify-between" data-magicpath-id="22" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <div className="flex items-center space-x-3" data-magicpath-id="23" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center" data-magicpath-id="24" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <IconComponent className="w-5 h-5 text-white" data-magicpath-id="25" data-magicpath-path="PerformanceTrackerApp.tsx" />
                     </div>
-
-                    {/* Metrics Grid */}
-                    <div className="grid grid-cols-2 gap-3 text-sm" data-magicpath-id="61" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <div data-magicpath-id="62" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div className="text-gray-400 text-xs" data-magicpath-id="63" data-magicpath-path="PerformanceTrackerApp.tsx">Actual</div>
-                        <div className="text-white font-medium" data-magicpath-id="64" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.actual.toFixed(1)}</div>
-                      </div>
-                      <div data-magicpath-id="65" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div className="text-gray-400 text-xs" data-magicpath-id="66" data-magicpath-path="PerformanceTrackerApp.tsx">MTD Oppty</div>
-                        <div className="text-white font-medium" data-magicpath-id="67" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.mtdOppty.toFixed(1)}</div>
-                      </div>
-                      <div className="relative" data-magicpath-id="68" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <button onMouseEnter={() => setShowTooltip(`${metric.code}-deficit`)} onMouseLeave={() => setShowTooltip(null)} className="text-left w-full" data-magicpath-id="69" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <div className="text-gray-400 text-xs flex items-center space-x-1" data-magicpath-id="70" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            <span data-magicpath-id="71" data-magicpath-path="PerformanceTrackerApp.tsx">Deficit</span>
-                            <Info className="w-2 h-2" data-magicpath-id="72" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                          </div>
-                          <div className={cn("font-medium", metric.deficit > 0 ? "text-red-400" : "text-green-400")} data-magicpath-id="73" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            {metric.deficit > 0 ? `+${metric.deficit.toFixed(1)}` : metric.deficit.toFixed(1)}
-                          </div>
-                        </button>
-                        {showTooltip === `${metric.code}-deficit` && <div className="absolute bottom-full left-0 mb-2 p-2 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 whitespace-nowrap z-10" data-magicpath-id="74" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            {getFormulaDescription('deficit')}
-                          </div>}
-                      </div>
-                      <div className="relative" data-magicpath-id="75" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <button onMouseEnter={() => setShowTooltip(`${metric.code}-pershift`)} onMouseLeave={() => setShowTooltip(null)} className="text-left w-full" data-magicpath-id="76" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <div className="text-gray-400 text-xs flex items-center space-x-1" data-magicpath-id="77" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            <span data-magicpath-id="78" data-magicpath-path="PerformanceTrackerApp.tsx">Per-Shift</span>
-                            <Info className="w-2 h-2" data-magicpath-id="79" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                          </div>
-                          <div className="text-white font-medium" data-magicpath-id="80" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.perShiftToCatchUp.toFixed(1)}</div>
-                        </button>
-                        {showTooltip === `${metric.code}-pershift` && <div className="absolute bottom-full left-0 mb-2 p-2 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 whitespace-nowrap z-10 max-w-48" data-magicpath-id="81" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            {getFormulaDescription('perShiftToCatchUp')}
-                          </div>}
-                      </div>
-                    </div>
-
-                    {/* Priority Score */}
-                    <div className="flex items-center justify-between pt-2 border-t border-gray-700/50" data-magicpath-id="82" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <div className="relative" data-magicpath-id="83" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <button onMouseEnter={() => setShowTooltip(`${metric.code}-priority`)} onMouseLeave={() => setShowTooltip(null)} className="flex items-center space-x-1 text-gray-400 text-xs" data-magicpath-id="84" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <span data-magicpath-id="85" data-magicpath-path="PerformanceTrackerApp.tsx">Priority Score</span>
-                          <Info className="w-2 h-2" data-magicpath-id="86" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                        </button>
-                        {showTooltip === `${metric.code}-priority` && <div className="absolute bottom-full left-0 mb-2 p-2 bg-gray-900 border border-gray-700 rounded-lg text-xs text-gray-300 whitespace-nowrap z-10" data-magicpath-id="87" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            {getFormulaDescription('priorityScore')}
-                          </div>}
-                      </div>
-                      <div className="flex items-center space-x-3" data-magicpath-id="88" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <span className="text-white font-medium" data-magicpath-id="89" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.priorityScore.toFixed(1)}</span>
-                        <button onClick={() => setSelectedMetricForActions(metric.code)} className="px-3 py-1 bg-[#E20074] text-white rounded-lg text-xs font-medium hover:bg-[#C21E68] transition-colors" data-magicpath-id="90" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          See Actions
-                        </button>
-                      </div>
+                    <div data-magicpath-id="26" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <h3 className="text-white font-heading" data-magicpath-id="27" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.name}</h3>
+                      <p className="text-gray-400 text-sm font-body" data-magicpath-id="28" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        {metric.actual} / {metric.target}
+                      </p>
                     </div>
                   </div>
-                </MatteCard>
-              </motion.div>;
+                  <div className="text-right" data-magicpath-id="29" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <div className="text-xl font-bold text-green-400" data-magicpath-id="30" data-magicpath-path="PerformanceTrackerApp.tsx">{percentage}%</div>
+                    <div className="text-xs text-gray-400" data-magicpath-id="31" data-magicpath-path="PerformanceTrackerApp.tsx">to target</div>
+                  </div>
+                </div>
+              </MatteCard>;
         })}
         </div>
 
-        {/* Bottom Sheet */}
-        <CatchUpBottomSheet isOpen={selectedMetricForActions !== null} onClose={() => setSelectedMetricForActions(null)} metricCode={selectedMetricForActions || ''} metricName={selectedMetricForActions ? catchUpStore.state.calculations.find(m => m.code === selectedMetricForActions)?.name || '' : ''} deficit={selectedMetricForActions ? catchUpStore.state.calculations.find(m => m.code === selectedMetricForActions)?.deficit || 0 : 0} perShiftTarget={selectedMetricForActions ? catchUpStore.state.calculations.find(m => m.code === selectedMetricForActions)?.perShiftToCatchUp || 0 : 0} data-magicpath-id="91" data-magicpath-path="PerformanceTrackerApp.tsx" />
+        {/* Performance Chart */}
+        <MatteCard className="p-6" variant="primary" data-magicpath-id="32" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <div className="flex items-center justify-between mb-4" data-magicpath-id="33" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <h3 className="text-white font-heading text-lg" data-magicpath-id="34" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Trend</h3>
+            <div className="text-xs text-gray-400" data-magicpath-id="35" data-magicpath-path="PerformanceTrackerApp.tsx">{viewMode} View</div>
+          </div>
+          <LineChart metrics={mockMetrics} data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx" />
+        </MatteCard>
+
+        {/* Focus Areas */}
+        <div className="space-y-3" data-magicpath-id="37" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <h2 className="text-lg font-heading text-white" data-magicpath-id="38" data-magicpath-path="PerformanceTrackerApp.tsx">Focus Areas</h2>
+          {bottomTwoMetrics.map((metric, index) => {
+          const percentage = Math.round(metric.actual / metric.target * 100);
+          const IconComponent = getMetricIcon(metric.name);
+          return <MatteCard key={metric.name} className="p-4" variant="secondary" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="flex items-center justify-between" data-magicpath-id="40" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <div className="flex items-center space-x-3" data-magicpath-id="41" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center" data-magicpath-id="42" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <IconComponent className="w-5 h-5 text-white" data-magicpath-id="43" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                    </div>
+                    <div data-magicpath-id="44" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <h3 className="text-white font-heading" data-magicpath-id="45" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.name}</h3>
+                      <p className="text-gray-400 text-sm font-body" data-magicpath-id="46" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        {metric.actual} / {metric.target}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right" data-magicpath-id="47" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <div className="text-xl font-bold text-orange-400" data-magicpath-id="48" data-magicpath-path="PerformanceTrackerApp.tsx">{percentage}%</div>
+                    <div className="text-xs text-gray-400" data-magicpath-id="49" data-magicpath-path="PerformanceTrackerApp.tsx">needs focus</div>
+                  </div>
+                </div>
+              </MatteCard>;
+        })}
+        </div>
+
+        {/* Motivational Quote */}
+        <MatteCard className="p-6" variant="accent" data-magicpath-id="50" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <div className="text-center" data-magicpath-id="51" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <h3 className="text-white font-heading text-lg mb-2" data-magicpath-id="52" data-magicpath-path="PerformanceTrackerApp.tsx">Daily Motivation</h3>
+            <blockquote className="text-gray-300 font-body italic text-sm leading-relaxed" data-magicpath-id="53" data-magicpath-path="PerformanceTrackerApp.tsx">
+              "Success is not final, failure is not fatal: it is the courage to continue that counts."
+            </blockquote>
+            <p className="text-gray-500 text-xs mt-2" data-magicpath-id="54" data-magicpath-path="PerformanceTrackerApp.tsx">— Winston Churchill</p>
+          </div>
+        </MatteCard>
       </div>
     </div>;
-  const renderHomeNavigation = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="92" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <div className="max-w-md mx-auto" data-magicpath-id="93" data-magicpath-path="PerformanceTrackerApp.tsx">
-        <h1 className="text-2xl font-display text-white text-center pt-4 mb-8" data-magicpath-id="94" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Hub</h1>
+  const renderHomeNavigation = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="55" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <div className="max-w-md mx-auto" data-magicpath-id="56" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <h1 className="text-2xl font-display text-white text-center pt-4 mb-8" data-magicpath-id="57" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Hub</h1>
         
-        <div className="grid grid-cols-2 gap-4" data-magicpath-id="95" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <div className="grid grid-cols-2 gap-4" data-magicpath-id="58" data-magicpath-path="PerformanceTrackerApp.tsx">
           {[{
           icon: Upload,
           label: 'Upload Report',
@@ -471,11 +382,11 @@ const PerformanceTrackerApp: React.FC = () => {
             y: 0
           }} transition={{
             delay: index * 0.1
-          }} data-magicpath-id="96" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <MatteCard className="p-6 h-32" variant="accent" hover data-magicpath-id="97" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <button onClick={() => setCurrentScreen(item.screen)} className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white hover:text-[#E20074] transition-colors" data-magicpath-id="98" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <IconComponent className="w-8 h-8" data-magicpath-id="99" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                  <span className="text-sm font-caption text-center" data-magicpath-id="100" data-magicpath-path="PerformanceTrackerApp.tsx">
+          }} data-magicpath-id="59" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <MatteCard className="p-6 h-32" variant="accent" hover data-magicpath-id="60" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <button onClick={() => setCurrentScreen(item.screen)} className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white hover:text-[#E20074] transition-colors" data-magicpath-id="61" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <IconComponent className="w-8 h-8" data-magicpath-id="62" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                  <span className="text-sm font-caption text-center" data-magicpath-id="63" data-magicpath-path="PerformanceTrackerApp.tsx">
                     {item.label}
                   </span>
                 </button>
@@ -485,35 +396,35 @@ const PerformanceTrackerApp: React.FC = () => {
         </div>
       </div>
     </div>;
-  const renderMetrics = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="101" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <div className="max-w-md mx-auto space-y-4" data-magicpath-id="102" data-magicpath-path="PerformanceTrackerApp.tsx">
-        <div className="flex justify-between items-center pt-4 mb-6" data-magicpath-id="103" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <h1 className="text-xl font-display text-white" data-magicpath-id="104" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Metrics</h1>
-          <ToggleSwitch checked={viewMode === 'EOM'} onChange={checked => setViewMode(checked ? 'EOM' : 'MTD')} leftLabel="MTD" rightLabel="EOM" data-magicpath-id="105" data-magicpath-path="PerformanceTrackerApp.tsx" />
+  const renderMetrics = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="64" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <div className="max-w-md mx-auto space-y-4" data-magicpath-id="65" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <div className="flex justify-between items-center pt-4 mb-6" data-magicpath-id="66" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <h1 className="text-xl font-display text-white" data-magicpath-id="67" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Metrics</h1>
+          <ToggleSwitch checked={viewMode === 'EOM'} onChange={checked => setViewMode(checked ? 'EOM' : 'MTD')} leftLabel="MTD" rightLabel="EOM" data-magicpath-id="68" data-magicpath-path="PerformanceTrackerApp.tsx" />
         </div>
 
-        {['Sales', 'Attach', 'Customer', 'Quality'].map(category => <div key={category} className="space-y-3" data-magicpath-id="106" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <h2 className="text-lg font-heading text-white" data-magicpath-id="107" data-magicpath-path="PerformanceTrackerApp.tsx">{category}</h2>
+        {['Sales', 'Attach', 'Customer', 'Quality'].map(category => <div key={category} className="space-y-3" data-magicpath-id="69" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <h2 className="text-lg font-heading text-white" data-magicpath-id="70" data-magicpath-path="PerformanceTrackerApp.tsx">{category}</h2>
             {mockMetrics.filter(metric => metric.category === category).map(metric => {
           const percentage = Math.round(metric.actual / metric.target * 100);
           const status = percentage >= 90 ? 'excellent' : percentage >= 70 ? 'good' : 'needs-improvement';
           const isCallQuality = metric.name === 'Call Quality';
-          return <MatteCard key={metric.name} className={`p-4 ${isCallQuality ? 'cursor-pointer hover:bg-gray-800/30 transition-colors' : ''}`} variant="primary" onClick={isCallQuality ? () => setShowCallQualityDetails(true) : undefined} data-magicpath-id="108" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    <div className="flex items-center justify-between" data-magicpath-id="109" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <div className="flex-1" data-magicpath-id="110" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <h3 className="text-white font-heading" data-magicpath-id="111" data-magicpath-path="PerformanceTrackerApp.tsx">
+          return <MatteCard key={metric.name} className={`p-4 ${isCallQuality ? 'cursor-pointer hover:bg-gray-800/30 transition-colors' : ''}`} variant="primary" onClick={isCallQuality ? () => setShowCallQualityDetails(true) : undefined} data-magicpath-id="71" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <div className="flex items-center justify-between" data-magicpath-id="72" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <div className="flex-1" data-magicpath-id="73" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <h3 className="text-white font-heading" data-magicpath-id="74" data-magicpath-path="PerformanceTrackerApp.tsx">
                           {metric.name}
                         </h3>
-                        <p className="text-gray-400 text-sm font-body" data-magicpath-id="112" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <p className="text-gray-400 text-sm font-body" data-magicpath-id="75" data-magicpath-path="PerformanceTrackerApp.tsx">
                           {metric.actual} / {metric.target}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1 font-caption" data-magicpath-id="113" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <p className="text-xs text-gray-500 mt-1 font-caption" data-magicpath-id="76" data-magicpath-path="PerformanceTrackerApp.tsx">
                           {status === 'excellent' ? 'Outstanding performance!' : status === 'good' ? 'Good progress, keep it up!' : 'Focus area - you can do this!'}
                         </p>
                       </div>
-                      <div className="flex items-center space-x-2" data-magicpath-id="114" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <ProgressRing percentage={percentage} size={60} status={status} data-magicpath-id="115" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                        {isCallQuality && <ArrowRight className="w-4 h-4 text-gray-400" data-magicpath-id="116" data-magicpath-path="PerformanceTrackerApp.tsx" />}
+                      <div className="flex items-center space-x-2" data-magicpath-id="77" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <ProgressRing percentage={percentage} size={60} status={status} data-magicpath-id="78" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                        {isCallQuality && <ArrowRight className="w-4 h-4 text-gray-400" data-magicpath-id="79" data-magicpath-path="PerformanceTrackerApp.tsx" />}
                       </div>
                     </div>
                   </MatteCard>;
@@ -522,7 +433,7 @@ const PerformanceTrackerApp: React.FC = () => {
       </div>
 
       {/* Call Quality Details Modal */}
-      <AnimatePresence data-magicpath-id="117" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <AnimatePresence data-magicpath-id="80" data-magicpath-path="PerformanceTrackerApp.tsx">
         {showCallQualityDetails && <motion.div initial={{
         opacity: 0
       }} animate={{
@@ -533,7 +444,7 @@ const PerformanceTrackerApp: React.FC = () => {
         if (e.target === e.currentTarget) {
           setShowCallQualityDetails(false);
         }
-      }} data-magicpath-id="118" data-magicpath-path="PerformanceTrackerApp.tsx">
+      }} data-magicpath-id="81" data-magicpath-path="PerformanceTrackerApp.tsx">
             <motion.div initial={{
           opacity: 0,
           scale: 0.9,
@@ -550,50 +461,50 @@ const PerformanceTrackerApp: React.FC = () => {
           type: "spring",
           damping: 25,
           stiffness: 300
-        }} className="w-full max-w-md max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-magicpath-id="119" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <MatteCard className="p-6" variant="primary" data-magicpath-id="120" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <div className="flex items-center justify-between mb-6" data-magicpath-id="121" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <h2 className="text-xl font-bold text-white" data-magicpath-id="122" data-magicpath-path="PerformanceTrackerApp.tsx">Call Quality Details</h2>
-                  <button onClick={() => setShowCallQualityDetails(false)} className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700/50" data-magicpath-id="123" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    <X className="w-5 h-5" data-magicpath-id="124" data-magicpath-path="PerformanceTrackerApp.tsx" />
+        }} className="w-full max-w-md max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-magicpath-id="82" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <MatteCard className="p-6" variant="primary" data-magicpath-id="83" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="flex items-center justify-between mb-6" data-magicpath-id="84" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <h2 className="text-xl font-bold text-white" data-magicpath-id="85" data-magicpath-path="PerformanceTrackerApp.tsx">Call Quality Details</h2>
+                  <button onClick={() => setShowCallQualityDetails(false)} className="text-gray-400 hover:text-white transition-colors p-1 rounded-lg hover:bg-gray-700/50" data-magicpath-id="86" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <X className="w-5 h-5" data-magicpath-id="87" data-magicpath-path="PerformanceTrackerApp.tsx" />
                   </button>
                 </div>
 
                 {/* Overall Score */}
-                <div className="text-center mb-6" data-magicpath-id="125" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <div className="flex items-center justify-center mb-2" data-magicpath-id="126" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    <ProgressRing percentage={Math.round(callQualityDetails.score / callQualityDetails.target * 100)} size={80} status={callQualityDetails.score >= 90 ? 'excellent' : 'good'} data-magicpath-id="127" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                <div className="text-center mb-6" data-magicpath-id="88" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <div className="flex items-center justify-center mb-2" data-magicpath-id="89" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <ProgressRing percentage={Math.round(callQualityDetails.score / callQualityDetails.target * 100)} size={80} status={callQualityDetails.score >= 90 ? 'excellent' : 'good'} data-magicpath-id="90" data-magicpath-path="PerformanceTrackerApp.tsx" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white" data-magicpath-id="128" data-magicpath-path="PerformanceTrackerApp.tsx">{callQualityDetails.score}/100</h3>
-                  <p className="text-gray-400 text-sm" data-magicpath-id="129" data-magicpath-path="PerformanceTrackerApp.tsx">Target: {callQualityDetails.target}</p>
+                  <h3 className="text-2xl font-bold text-white" data-magicpath-id="91" data-magicpath-path="PerformanceTrackerApp.tsx">{callQualityDetails.score}/100</h3>
+                  <p className="text-gray-400 text-sm" data-magicpath-id="92" data-magicpath-path="PerformanceTrackerApp.tsx">Target: {callQualityDetails.target}</p>
                 </div>
 
                 {/* Breakdown */}
-                <div className="space-y-4 mb-6" data-magicpath-id="130" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="131" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Breakdown</h4>
-                  {Object.entries(callQualityDetails.breakdown).map(([key, value]) => <div key={key} className="flex items-center justify-between" data-magicpath-id="132" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <span className="text-gray-300 capitalize" data-magicpath-id="133" data-magicpath-path="PerformanceTrackerApp.tsx">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                      <div className="flex items-center space-x-2" data-magicpath-id="134" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div className="w-20 h-2 bg-gray-700 rounded-full overflow-hidden" data-magicpath-id="135" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="space-y-4 mb-6" data-magicpath-id="93" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="94" data-magicpath-path="PerformanceTrackerApp.tsx">Performance Breakdown</h4>
+                  {Object.entries(callQualityDetails.breakdown).map(([key, value]) => <div key={key} className="flex items-center justify-between" data-magicpath-id="95" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <span className="text-gray-300 capitalize" data-magicpath-id="96" data-magicpath-path="PerformanceTrackerApp.tsx">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <div className="flex items-center space-x-2" data-magicpath-id="97" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <div className="w-20 h-2 bg-gray-700 rounded-full overflow-hidden" data-magicpath-id="98" data-magicpath-path="PerformanceTrackerApp.tsx">
                           <div className={`h-full rounded-full ${value >= 90 ? 'bg-green-400' : value >= 80 ? 'bg-yellow-400' : 'bg-red-400'}`} style={{
                       width: `${value}%`
-                    }} data-magicpath-id="136" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                    }} data-magicpath-id="99" data-magicpath-path="PerformanceTrackerApp.tsx" />
                         </div>
-                        <span className="text-white text-sm font-medium w-8" data-magicpath-id="137" data-magicpath-path="PerformanceTrackerApp.tsx">{value}%</span>
+                        <span className="text-white text-sm font-medium w-8" data-magicpath-id="100" data-magicpath-path="PerformanceTrackerApp.tsx">{value}%</span>
                       </div>
                     </div>)}
                 </div>
 
                 {/* Recent Calls */}
-                <div className="space-y-4 mb-6" data-magicpath-id="138" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="139" data-magicpath-path="PerformanceTrackerApp.tsx">Recent Calls</h4>
-                  <div className="space-y-2" data-magicpath-id="140" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    {callQualityDetails.recentCalls.map((call, index) => <div key={index} className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg" data-magicpath-id="141" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div data-magicpath-id="142" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <p className="text-white text-sm font-medium" data-magicpath-id="143" data-magicpath-path="PerformanceTrackerApp.tsx">{call.customer}</p>
-                          <p className="text-gray-400 text-xs" data-magicpath-id="144" data-magicpath-path="PerformanceTrackerApp.tsx">{call.date} • {call.duration}</p>
+                <div className="space-y-4 mb-6" data-magicpath-id="101" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="102" data-magicpath-path="PerformanceTrackerApp.tsx">Recent Calls</h4>
+                  <div className="space-y-2" data-magicpath-id="103" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    {callQualityDetails.recentCalls.map((call, index) => <div key={index} className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg" data-magicpath-id="104" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <div data-magicpath-id="105" data-magicpath-path="PerformanceTrackerApp.tsx">
+                          <p className="text-white text-sm font-medium" data-magicpath-id="106" data-magicpath-path="PerformanceTrackerApp.tsx">{call.customer}</p>
+                          <p className="text-gray-400 text-xs" data-magicpath-id="107" data-magicpath-path="PerformanceTrackerApp.tsx">{call.date} • {call.duration}</p>
                         </div>
-                        <div className={`px-2 py-1 rounded text-xs font-medium ${call.score >= 90 ? 'bg-green-400/20 text-green-400' : call.score >= 80 ? 'bg-yellow-400/20 text-yellow-400' : 'bg-red-400/20 text-red-400'}`} data-magicpath-id="145" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <div className={`px-2 py-1 rounded text-xs font-medium ${call.score >= 90 ? 'bg-green-400/20 text-green-400' : call.score >= 80 ? 'bg-yellow-400/20 text-yellow-400' : 'bg-red-400/20 text-red-400'}`} data-magicpath-id="108" data-magicpath-path="PerformanceTrackerApp.tsx">
                           {call.score}%
                         </div>
                       </div>)}
@@ -601,12 +512,12 @@ const PerformanceTrackerApp: React.FC = () => {
                 </div>
 
                 {/* Tips */}
-                <div className="space-y-4" data-magicpath-id="146" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="147" data-magicpath-path="PerformanceTrackerApp.tsx">Improvement Tips</h4>
-                  <div className="space-y-2" data-magicpath-id="148" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    {callQualityDetails.tips.map((tip, index) => <div key={index} className="flex items-start space-x-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg" data-magicpath-id="149" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0" data-magicpath-id="150" data-magicpath-path="PerformanceTrackerApp.tsx" />
-                        <p className="text-gray-300 text-sm" data-magicpath-id="151" data-magicpath-path="PerformanceTrackerApp.tsx">{tip}</p>
+                <div className="space-y-4" data-magicpath-id="109" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <h4 className="text-lg font-semibold text-white" data-magicpath-id="110" data-magicpath-path="PerformanceTrackerApp.tsx">Improvement Tips</h4>
+                  <div className="space-y-2" data-magicpath-id="111" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    {callQualityDetails.tips.map((tip, index) => <div key={index} className="flex items-start space-x-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg" data-magicpath-id="112" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0" data-magicpath-id="113" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                        <p className="text-gray-300 text-sm" data-magicpath-id="114" data-magicpath-path="PerformanceTrackerApp.tsx">{tip}</p>
                       </div>)}
                   </div>
                 </div>
@@ -615,32 +526,32 @@ const PerformanceTrackerApp: React.FC = () => {
           </motion.div>}
       </AnimatePresence>
     </div>;
-  const renderUpload = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="152" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <div className="max-w-md mx-auto space-y-6" data-magicpath-id="153" data-magicpath-path="PerformanceTrackerApp.tsx">
-        <h1 className="text-2xl font-bold text-white text-center pt-4" data-magicpath-id="154" data-magicpath-path="PerformanceTrackerApp.tsx">Upload Report</h1>
+  const renderUpload = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-900 p-4 pb-20" data-magicpath-id="115" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <div className="max-w-md mx-auto space-y-6" data-magicpath-id="116" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <h1 className="text-2xl font-bold text-white text-center pt-4" data-magicpath-id="117" data-magicpath-path="PerformanceTrackerApp.tsx">Upload Report</h1>
         
-        <MatteCard className="p-6" variant="primary" data-magicpath-id="155" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <div className="space-y-4" data-magicpath-id="156" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div data-magicpath-id="157" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <label htmlFor="sales-rep-name" className="block text-sm font-medium text-gray-300 mb-2" data-magicpath-id="158" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <MatteCard className="p-6" variant="primary" data-magicpath-id="118" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <div className="space-y-4" data-magicpath-id="119" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div data-magicpath-id="120" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <label htmlFor="sales-rep-name" className="block text-sm font-medium text-gray-300 mb-2" data-magicpath-id="121" data-magicpath-path="PerformanceTrackerApp.tsx">
                 Sales Rep Name or ID
               </label>
-              <input type="text" id="sales-rep-name" placeholder="Enter your name or employee ID" className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent transition-all" data-magicpath-id="159" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <p className="text-xs text-gray-500 mt-1" data-magicpath-id="160" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <input type="text" id="sales-rep-name" placeholder="Enter your name or employee ID" className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent transition-all" data-magicpath-id="122" data-magicpath-path="PerformanceTrackerApp.tsx" />
+              <p className="text-xs text-gray-500 mt-1" data-magicpath-id="123" data-magicpath-path="PerformanceTrackerApp.tsx">
                 This helps OCR identify your specific data in the report
               </p>
             </div>
             
-            <div className="text-center" data-magicpath-id="161" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="image-upload" data-magicpath-id="162" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <label htmlFor="image-upload" className="cursor-pointer block p-8 border-2 border-dashed border-gray-600 rounded-lg hover:border-[#E20074] hover:bg-gray-800/30 transition-all group" data-magicpath-id="163" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div className="text-center" data-magicpath-id="124" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" id="image-upload" data-magicpath-id="125" data-magicpath-path="PerformanceTrackerApp.tsx" />
+              <label htmlFor="image-upload" className="cursor-pointer block p-8 border-2 border-dashed border-gray-600 rounded-lg hover:border-[#E20074] hover:bg-gray-800/30 transition-all group" data-magicpath-id="126" data-magicpath-path="PerformanceTrackerApp.tsx">
                 <motion.div initial={{
                 scale: 1
               }} whileHover={{
                 scale: 1.05
               }} whileTap={{
                 scale: 0.95
-              }} className="flex flex-col items-center" data-magicpath-id="164" data-magicpath-path="PerformanceTrackerApp.tsx">
+              }} className="flex flex-col items-center" data-magicpath-id="127" data-magicpath-path="PerformanceTrackerApp.tsx">
                   <motion.div animate={{
                   y: [0, -8, 0],
                   rotate: [0, 5, -5, 0]
@@ -648,7 +559,7 @@ const PerformanceTrackerApp: React.FC = () => {
                   duration: 2,
                   repeat: Infinity,
                   ease: "easeInOut"
-                }} className="mb-4" data-magicpath-id="165" data-magicpath-path="PerformanceTrackerApp.tsx">
+                }} className="mb-4" data-magicpath-id="128" data-magicpath-path="PerformanceTrackerApp.tsx">
                     <Camera className="w-12 h-12 text-gray-500 group-hover:text-[#E20074] transition-colors duration-300" />
                   </motion.div>
                   <motion.p className="text-gray-400 group-hover:text-white transition-colors duration-300 font-medium" animate={{
@@ -657,7 +568,7 @@ const PerformanceTrackerApp: React.FC = () => {
                   duration: 1.5,
                   repeat: Infinity,
                   ease: "easeInOut"
-                }} data-magicpath-id="166" data-magicpath-path="PerformanceTrackerApp.tsx">
+                }} data-magicpath-id="129" data-magicpath-path="PerformanceTrackerApp.tsx">
                     Tap to upload report image
                   </motion.p>
                   <motion.div className="mt-2 w-16 h-0.5 bg-gradient-to-r from-transparent via-[#E20074] to-transparent opacity-0 group-hover:opacity-100" initial={{
@@ -666,58 +577,58 @@ const PerformanceTrackerApp: React.FC = () => {
                   scaleX: 1
                 }} transition={{
                   duration: 0.3
-                }} data-magicpath-id="167" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                }} data-magicpath-id="130" data-magicpath-path="PerformanceTrackerApp.tsx" />
                 </motion.div>
               </label>
             </div>
           </div>
         </MatteCard>
 
-        {uploadedImage && <MatteCard className="p-4" variant="secondary" data-magicpath-id="168" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <img src={uploadedImage} alt="Uploaded report" className="w-full h-48 object-cover rounded-lg mb-4" data-magicpath-id="169" data-magicpath-path="PerformanceTrackerApp.tsx" />
-            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="170" data-magicpath-path="PerformanceTrackerApp.tsx">
+        {uploadedImage && <MatteCard className="p-4" variant="secondary" data-magicpath-id="131" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <img src={uploadedImage} alt="Uploaded report" className="w-full h-48 object-cover rounded-lg mb-4" data-magicpath-id="132" data-magicpath-path="PerformanceTrackerApp.tsx" />
+            <button onClick={handleExtractMetrics} disabled={isExtracting} className="w-full bg-gradient-to-r from-[#E20074] to-[#20074] text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="133" data-magicpath-path="PerformanceTrackerApp.tsx">
               {isExtracting ? 'Extracting...' : 'Auto Extract Metrics'}
             </button>
           </MatteCard>}
 
         {/* Data Summary Modal */}
-        {showDataSummary && extractedData && <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" data-magicpath-id="171" data-magicpath-path="PerformanceTrackerApp.tsx">
+        {showDataSummary && extractedData && <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" data-magicpath-id="134" data-magicpath-path="PerformanceTrackerApp.tsx">
             <motion.div initial={{
           opacity: 0,
           scale: 0.9
         }} animate={{
           opacity: 1,
           scale: 1
-        }} className="w-full max-w-md max-h-[80vh] overflow-y-auto" data-magicpath-id="172" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <MatteCard className="p-6" variant="primary" data-magicpath-id="173" data-magicpath-path="PerformanceTrackerApp.tsx">
-                <div className="flex items-center justify-between mb-6" data-magicpath-id="174" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <h2 className="text-xl font-bold text-white" data-magicpath-id="175" data-magicpath-path="PerformanceTrackerApp.tsx">Extracted Data Summary</h2>
-                  <button onClick={handleCancelEdit} className="text-gray-400 hover:text-white transition-colors" data-magicpath-id="176" data-magicpath-path="PerformanceTrackerApp.tsx">
-                    <X className="w-5 h-5" data-magicpath-id="177" data-magicpath-path="PerformanceTrackerApp.tsx" />
+        }} className="w-full max-w-md max-h-[80vh] overflow-y-auto" data-magicpath-id="135" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <MatteCard className="p-6" variant="primary" data-magicpath-id="136" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="flex items-center justify-between mb-6" data-magicpath-id="137" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <h2 className="text-xl font-bold text-white" data-magicpath-id="138" data-magicpath-path="PerformanceTrackerApp.tsx">Extracted Data Summary</h2>
+                  <button onClick={handleCancelEdit} className="text-gray-400 hover:text-white transition-colors" data-magicpath-id="139" data-magicpath-path="PerformanceTrackerApp.tsx">
+                    <X className="w-5 h-5" data-magicpath-id="140" data-magicpath-path="PerformanceTrackerApp.tsx" />
                   </button>
                 </div>
 
-                <div className="space-y-4 mb-6" data-magicpath-id="178" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <p className="text-gray-300 text-sm" data-magicpath-id="179" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="space-y-4 mb-6" data-magicpath-id="141" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <p className="text-gray-300 text-sm" data-magicpath-id="142" data-magicpath-path="PerformanceTrackerApp.tsx">
                     Review and edit the extracted metrics below. Make any necessary corrections before saving.
                   </p>
                   
-                  {editingData?.map((metric, index) => <MatteCard key={index} className="p-4" variant="secondary" data-magicpath-id="180" data-magicpath-path="PerformanceTrackerApp.tsx">
-                      <div className="space-y-3" data-magicpath-id="181" data-magicpath-path="PerformanceTrackerApp.tsx">
-                        <h3 className="text-white font-medium" data-magicpath-id="182" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.name}</h3>
-                        <div className="grid grid-cols-2 gap-3" data-magicpath-id="183" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <div data-magicpath-id="184" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="185" data-magicpath-path="PerformanceTrackerApp.tsx">Actual</label>
-                            <input type="number" value={metric.actual} onChange={e => handleDataEdit(index, 'actual', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" data-magicpath-id="186" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                  {editingData?.map((metric, index) => <MatteCard key={index} className="p-4" variant="secondary" data-magicpath-id="143" data-magicpath-path="PerformanceTrackerApp.tsx">
+                      <div className="space-y-3" data-magicpath-id="144" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <h3 className="text-white font-medium" data-magicpath-id="145" data-magicpath-path="PerformanceTrackerApp.tsx">{metric.name}</h3>
+                        <div className="grid grid-cols-2 gap-3" data-magicpath-id="146" data-magicpath-path="PerformanceTrackerApp.tsx">
+                          <div data-magicpath-id="147" data-magicpath-path="PerformanceTrackerApp.tsx">
+                            <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="148" data-magicpath-path="PerformanceTrackerApp.tsx">Actual</label>
+                            <input type="number" value={metric.actual} onChange={e => handleDataEdit(index, 'actual', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" data-magicpath-id="149" data-magicpath-path="PerformanceTrackerApp.tsx" />
                           </div>
-                          <div data-magicpath-id="187" data-magicpath-path="PerformanceTrackerApp.tsx">
-                            <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="188" data-magicpath-path="PerformanceTrackerApp.tsx">Target</label>
-                            <input type="number" value={metric.target} onChange={e => handleDataEdit(index, 'target', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" data-magicpath-id="189" data-magicpath-path="PerformanceTrackerApp.tsx" />
+                          <div data-magicpath-id="150" data-magicpath-path="PerformanceTrackerApp.tsx">
+                            <label className="block text-xs text-gray-400 mb-1" data-magicpath-id="151" data-magicpath-path="PerformanceTrackerApp.tsx">Target</label>
+                            <input type="number" value={metric.target} onChange={e => handleDataEdit(index, 'target', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" data-magicpath-id="152" data-magicpath-path="PerformanceTrackerApp.tsx" />
                           </div>
                         </div>
-                        <div className="flex items-center justify-between text-xs" data-magicpath-id="190" data-magicpath-path="PerformanceTrackerApp.tsx">
-                          <span className="text-gray-500" data-magicpath-id="191" data-magicpath-path="PerformanceTrackerApp.tsx">Category: {metric.category}</span>
-                          <span className={`font-medium ${metric.actual / metric.target >= 0.9 ? 'text-green-400' : metric.actual / metric.target >= 0.7 ? 'text-yellow-400' : 'text-red-400'}`} data-magicpath-id="192" data-magicpath-path="PerformanceTrackerApp.tsx">
+                        <div className="flex items-center justify-between text-xs" data-magicpath-id="153" data-magicpath-path="PerformanceTrackerApp.tsx">
+                          <span className="text-gray-500" data-magicpath-id="154" data-magicpath-path="PerformanceTrackerApp.tsx">Category: {metric.category}</span>
+                          <span className={`font-medium ${metric.actual / metric.target >= 0.9 ? 'text-green-400' : metric.actual / metric.target >= 0.7 ? 'text-yellow-400' : 'text-red-400'}`} data-magicpath-id="155" data-magicpath-path="PerformanceTrackerApp.tsx">
                             {Math.round(metric.actual / metric.target * 100)}%
                           </span>
                         </div>
@@ -725,11 +636,11 @@ const PerformanceTrackerApp: React.FC = () => {
                     </MatteCard>)}
                 </div>
 
-                <div className="flex space-x-3" data-magicpath-id="193" data-magicpath-path="PerformanceTrackerApp.tsx">
-                  <button onClick={handleCancelEdit} className="flex-1 px-4 py-3 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors" data-magicpath-id="194" data-magicpath-path="PerformanceTrackerApp.tsx">
+                <div className="flex space-x-3" data-magicpath-id="156" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <button onClick={handleCancelEdit} className="flex-1 px-4 py-3 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-600 transition-colors" data-magicpath-id="157" data-magicpath-path="PerformanceTrackerApp.tsx">
                     Cancel
                   </button>
-                  <button onClick={handleSaveData} className="flex-1 px-4 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] text-white rounded-lg font-medium hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="195" data-magicpath-path="PerformanceTrackerApp.tsx">
+                  <button onClick={handleSaveData} className="flex-1 px-4 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] text-white rounded-lg font-medium hover:from-[#C21E68] hover:to-[#1A0660] transition-all shadow-lg" data-magicpath-id="158" data-magicpath-path="PerformanceTrackerApp.tsx">
                     Save Data
                   </button>
                 </div>
@@ -737,21 +648,23 @@ const PerformanceTrackerApp: React.FC = () => {
             </motion.div>
           </div>}
 
-        {isExtracting && <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" data-magicpath-id="196" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <MatteCard className="p-8 text-center" variant="accent" data-magicpath-id="197" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <div className="animate-spin w-8 h-8 border-2 border-[#E20074] border-t-transparent rounded-full mx-auto mb-4" data-magicpath-id="198" data-magicpath-path="PerformanceTrackerApp.tsx"></div>
-              <p className="text-white" data-magicpath-id="199" data-magicpath-path="PerformanceTrackerApp.tsx">Processing image...</p>
+        {isExtracting && <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50" data-magicpath-id="159" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <MatteCard className="p-8 text-center" variant="accent" data-magicpath-id="160" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <div className="animate-spin w-8 h-8 border-2 border-[#E20074] border-t-transparent rounded-full mx-auto mb-4" data-magicpath-id="161" data-magicpath-path="PerformanceTrackerApp.tsx"></div>
+              <p className="text-white" data-magicpath-id="162" data-magicpath-path="PerformanceTrackerApp.tsx">Processing image...</p>
             </MatteCard>
           </div>}
       </div>
     </div>;
+  const renderCatchUp = () => <CatchUpView viewMode={viewMode} onViewModeChange={setViewMode} data-magicpath-id="163" data-magicpath-path="PerformanceTrackerApp.tsx" />;
   const renderCurrentScreen = () => {
     switch (currentScreen) {
       case 'welcome':
         return renderWelcomeScreen();
       case 'dashboard':
-      case 'catchup':
         return renderDashboard();
+      case 'catchup':
+        return renderCatchUp();
       case 'metrics':
         return renderMetrics();
       case 'upload':
@@ -760,8 +673,8 @@ const PerformanceTrackerApp: React.FC = () => {
         return renderDashboard();
     }
   };
-  return <div className="relative" data-magicpath-id="200" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <AnimatePresence mode="wait" data-magicpath-id="201" data-magicpath-path="PerformanceTrackerApp.tsx">
+  return <div className="relative" data-magicpath-id="164" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <AnimatePresence mode="wait" data-magicpath-id="165" data-magicpath-path="PerformanceTrackerApp.tsx">
         <motion.div key={currentScreen} initial={{
         opacity: 0,
         x: 20
@@ -773,12 +686,12 @@ const PerformanceTrackerApp: React.FC = () => {
         x: -20
       }} transition={{
         duration: 0.3
-      }} data-magicpath-id="202" data-magicpath-path="PerformanceTrackerApp.tsx">
+      }} data-magicpath-id="166" data-magicpath-path="PerformanceTrackerApp.tsx">
           {renderCurrentScreen()}
         </motion.div>
       </AnimatePresence>
 
-      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="203" data-magicpath-path="PerformanceTrackerApp.tsx" />}
+      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="167" data-magicpath-path="PerformanceTrackerApp.tsx" />}
 
       {showToast && <motion.div initial={{
       opacity: 0,
@@ -789,11 +702,11 @@ const PerformanceTrackerApp: React.FC = () => {
     }} exit={{
       opacity: 0,
       y: 50
-    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="204" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <MatteCard className="p-4" variant="accent" data-magicpath-id="205" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div className="flex items-center space-x-3" data-magicpath-id="206" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="207" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <p className="text-white" data-magicpath-id="208" data-magicpath-path="PerformanceTrackerApp.tsx">
+    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="168" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <MatteCard className="p-4" variant="accent" data-magicpath-id="169" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div className="flex items-center space-x-3" data-magicpath-id="170" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="171" data-magicpath-path="PerformanceTrackerApp.tsx" />
+              <p className="text-white" data-magicpath-id="172" data-magicpath-path="PerformanceTrackerApp.tsx">
                 {extractedData ? 'Data saved successfully!' : 'Metrics extracted successfully!'}
               </p>
             </div>
