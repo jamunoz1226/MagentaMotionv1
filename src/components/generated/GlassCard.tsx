@@ -40,20 +40,20 @@ const MatteCard: React.FC<MatteCardProps> = ({
     }
     onClick?.();
   };
-  const cardContent = <div className={baseClasses} onClick={handleCardClick} data-magicpath-id="0" data-magicpath-path="GlassCard.tsx">
+  const cardContent = <div className={baseClasses} onClick={handleCardClick}>
       {/* Subtle texture overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-black/[0.02] pointer-events-none" data-magicpath-id="1" data-magicpath-path="GlassCard.tsx" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] via-transparent to-black/[0.02] pointer-events-none" />
       
       {/* Matte finish highlight */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" data-magicpath-id="2" data-magicpath-path="GlassCard.tsx" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       
       {/* Content */}
-      <div className="relative z-10" data-magicpath-id="3" data-magicpath-path="GlassCard.tsx">
+      <div className="relative z-10">
         {children}
       </div>
 
       {/* Full Screen Overlay */}
-      <AnimatePresence data-magicpath-id="4" data-magicpath-path="GlassCard.tsx">
+      <AnimatePresence>
         {isOverlayOpen && <motion.div initial={{
         opacity: 0
       }} animate={{
@@ -66,7 +66,7 @@ const MatteCard: React.FC<MatteCardProps> = ({
         if (e.target === e.currentTarget) {
           setIsOverlayOpen(false);
         }
-      }} data-magicpath-id="5" data-magicpath-path="GlassCard.tsx">
+      }}>
             <motion.div initial={{
           scale: 0.9,
           opacity: 0
@@ -79,14 +79,14 @@ const MatteCard: React.FC<MatteCardProps> = ({
         }} transition={{
           duration: 0.3,
           ease: "easeOut"
-        }} className={cn("relative max-w-4xl max-h-[90vh] overflow-auto", baseClasses)} onClick={e => e.stopPropagation()} data-magicpath-id="6" data-magicpath-path="GlassCard.tsx">
+        }} className={cn("relative max-w-4xl max-h-[90vh] overflow-auto", baseClasses)} onClick={e => e.stopPropagation()}>
               {/* Close Button */}
-              <button onClick={() => setIsOverlayOpen(false)} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-colors duration-200 text-gray-300 hover:text-white" aria-label="Close overlay" data-magicpath-id="7" data-magicpath-path="GlassCard.tsx">
-                <X size={20} data-magicpath-id="8" data-magicpath-path="GlassCard.tsx" />
+              <button onClick={() => setIsOverlayOpen(false)} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-colors duration-200 text-gray-300 hover:text-white" aria-label="Close overlay">
+                <X size={20} />
               </button>
 
               {/* Overlay Content */}
-              <div className="relative z-10" data-magicpath-id="9" data-magicpath-path="GlassCard.tsx">
+              <div className="relative z-10">
                 {children}
               </div>
             </motion.div>
@@ -108,7 +108,7 @@ const MatteCard: React.FC<MatteCardProps> = ({
       y: -2
     } : undefined} whileTap={onClick ? {
       scale: 0.98
-    } : undefined} data-magicpath-id="10" data-magicpath-path="GlassCard.tsx">
+    } : undefined}>
         {cardContent}
       </motion.div>;
   }
