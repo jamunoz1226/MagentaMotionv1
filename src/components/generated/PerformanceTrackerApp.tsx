@@ -672,6 +672,9 @@ const PerformanceTrackerApp: React.FC = () => {
         return renderMetrics();
       case 'upload':
         return renderUpload();
+      case 'daily':
+        return renderDashboard();
+      // Add daily case routing to dashboard
       default:
         return renderDashboard();
     }
