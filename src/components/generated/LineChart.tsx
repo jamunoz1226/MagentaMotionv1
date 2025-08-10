@@ -50,25 +50,25 @@ const DetailCard: React.FC<DetailCardProps> = ({
     opacity: 0,
     scale: 0.8,
     y: 10
-  }} className="fixed inset-0 z-[9999] flex items-center justify-center p-4" onClick={e => {
+  }} className="fixed inset-0 z-[9999] flex items-start justify-center p-4 pt-20 pb-24" onClick={e => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   }} data-magicpath-id="0" data-magicpath-path="LineChart.tsx">
-      {/* Backdrop */}
+      {/* Backdrop with dimming effect */}
       <motion.div initial={{
       opacity: 0
     }} animate={{
       opacity: 1
     }} exit={{
       opacity: 0
-    }} className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} data-magicpath-id="1" data-magicpath-path="LineChart.tsx" />
+    }} className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} data-magicpath-id="1" data-magicpath-path="LineChart.tsx" />
       
-      {/* Detail Card */}
+      {/* Detail Card - positioned to avoid overlap */}
       <motion.div initial={{
       opacity: 0,
       scale: 0.9,
-      y: 20
+      y: -20
     }} animate={{
       opacity: 1,
       scale: 1,
@@ -76,12 +76,12 @@ const DetailCard: React.FC<DetailCardProps> = ({
     }} exit={{
       opacity: 0,
       scale: 0.9,
-      y: 20
+      y: -20
     }} transition={{
       duration: 0.3,
       ease: "easeOut"
-    }} className="relative z-10 w-full max-w-sm" onClick={e => e.stopPropagation()} data-magicpath-id="2" data-magicpath-path="LineChart.tsx">
-        <GlassCard className="p-6 border border-gray-600 shadow-2xl" data-magicpath-id="3" data-magicpath-path="LineChart.tsx">
+    }} className="relative z-10 w-full max-w-sm mx-auto" onClick={e => e.stopPropagation()} data-magicpath-id="2" data-magicpath-path="LineChart.tsx">
+        <GlassCard className="p-6 border border-gray-600 shadow-2xl mx-4" data-magicpath-id="3" data-magicpath-path="LineChart.tsx">
           {/* Close Button */}
           <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-800/80 hover:bg-gray-700/80 transition-colors duration-200 text-gray-300 hover:text-white" aria-label="Close detail view" data-magicpath-id="4" data-magicpath-path="LineChart.tsx">
             <X size={18} data-magicpath-id="5" data-magicpath-path="LineChart.tsx" />
