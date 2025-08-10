@@ -13,9 +13,9 @@ interface ShiftViewProps {
   onNavigateToCatchUp?: (metric?: string) => void;
 }
 const METRIC_LABELS = {
-  voice: 'Voice',
-  bts: 'BTS',
-  tfb: 'TFB',
+  voice: 'Voice Activations',
+  bts: 'BTS Activations',
+  tfb: 'TFB Activations',
   p360: 'P360 Sold',
   acc: 'Accessories Sold',
   devices: 'Devices Sold'
@@ -141,16 +141,16 @@ export default function ShiftView({
   const CSATRow = () => {
     const csatAvg = shiftStore.csatAvg();
     const csatCount = shiftStore.incremental.csatCount;
-    return <div className="sh-csat-row p-4 bg-gray-800/30 rounded-xl border border-gray-700/50 backdrop-blur-sm" data-magicpath-id="0" data-magicpath-path="ShiftView.tsx">
+    return <div className="p-4 bg-gray-800/30 rounded-xl border border-gray-700/50 backdrop-blur-sm" data-magicpath-id="0" data-magicpath-path="ShiftView.tsx">
         <div className="flex items-center justify-between" data-magicpath-id="1" data-magicpath-path="ShiftView.tsx">
           <div className="flex items-center space-x-3" data-magicpath-id="2" data-magicpath-path="ShiftView.tsx">
             <div className="w-10 h-10 rounded-lg bg-yellow-400/10 flex items-center justify-center" data-magicpath-id="3" data-magicpath-path="ShiftView.tsx">
               <Target className="w-5 h-5 text-yellow-400" data-magicpath-id="4" data-magicpath-path="ShiftView.tsx" />
             </div>
             <div data-magicpath-id="5" data-magicpath-path="ShiftView.tsx">
-              <span className="text-white font-medium text-sm" data-magicpath-id="6" data-magicpath-path="ShiftView.tsx">CSAT Average</span>
+              <span className="text-white font-medium text-sm" data-magicpath-id="6" data-magicpath-path="ShiftView.tsx">Survey Score</span>
               <div className="text-xs text-gray-400" data-magicpath-id="7" data-magicpath-path="ShiftView.tsx">
-                {csatAvg.toFixed(1)} ({csatCount} responses)
+                {csatAvg.toFixed(1)} avg ({csatCount} responses)
               </div>
             </div>
           </div>
@@ -224,67 +224,69 @@ export default function ShiftView({
         {/* Activations Section */}
         <div className="space-y-3" data-magicpath-id="40" data-magicpath-path="ShiftView.tsx">
           <h2 className="text-lg font-heading text-white" data-magicpath-id="41" data-magicpath-path="ShiftView.tsx">Activations</h2>
-          <div className="space-y-2" data-magicpath-id="42" data-magicpath-path="ShiftView.tsx">
-            <CounterRow icon={<Phone className="w-5 h-5" data-magicpath-id="44" data-magicpath-path="ShiftView.tsx" />} label="Voice" value={shiftStore.activations.voice} onInc={() => handleIncrement('activations.voice')} onDec={() => handleDecrement('activations.voice')} target={shiftStore.targets.voice} remaining={shiftStore.remaining('voice')} accent="green" data-magicpath-id="43" data-magicpath-path="ShiftView.tsx" />
-            <CounterRow icon={<Smartphone className="w-5 h-5" data-magicpath-id="46" data-magicpath-path="ShiftView.tsx" />} label="BTS" value={shiftStore.activations.bts} onInc={() => handleIncrement('activations.bts')} onDec={() => handleDecrement('activations.bts')} target={shiftStore.targets.bts} remaining={shiftStore.remaining('bts')} accent="blue" data-magicpath-id="45" data-magicpath-path="ShiftView.tsx" />
-            <CounterRow icon={<Wifi className="w-5 h-5" data-magicpath-id="48" data-magicpath-path="ShiftView.tsx" />} label="TFB" value={shiftStore.activations.tfb} onInc={() => handleIncrement('activations.tfb')} onDec={() => handleDecrement('activations.tfb')} target={shiftStore.targets.tfb} remaining={shiftStore.remaining('tfb')} accent="orange" data-magicpath-id="47" data-magicpath-path="ShiftView.tsx" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" data-magicpath-id="42" data-magicpath-path="ShiftView.tsx">
+            <CounterRow icon={<Phone className="w-5 h-5" data-magicpath-id="44" data-magicpath-path="ShiftView.tsx" />} label="Voice Activations" value={shiftStore.activations.voice} onInc={() => handleIncrement('activations.voice')} onDec={() => handleDecrement('activations.voice')} target={shiftStore.targets.voice} remaining={shiftStore.remaining('voice')} accent="green" data-magicpath-id="43" data-magicpath-path="ShiftView.tsx" />
+            <CounterRow icon={<Smartphone className="w-5 h-5" data-magicpath-id="46" data-magicpath-path="ShiftView.tsx" />} label="BTS Activations" value={shiftStore.activations.bts} onInc={() => handleIncrement('activations.bts')} onDec={() => handleDecrement('activations.bts')} target={shiftStore.targets.bts} remaining={shiftStore.remaining('bts')} accent="blue" data-magicpath-id="45" data-magicpath-path="ShiftView.tsx" />
+            <CounterRow icon={<Wifi className="w-5 h-5" data-magicpath-id="48" data-magicpath-path="ShiftView.tsx" />} label="TFB Activations" value={shiftStore.activations.tfb} onInc={() => handleIncrement('activations.tfb')} onDec={() => handleDecrement('activations.tfb')} target={shiftStore.targets.tfb} remaining={shiftStore.remaining('tfb')} accent="orange" data-magicpath-id="47" data-magicpath-path="ShiftView.tsx" />
           </div>
         </div>
 
         {/* Incremental Section */}
         <div className="space-y-3" data-magicpath-id="49" data-magicpath-path="ShiftView.tsx">
           <h2 className="text-lg font-heading text-white" data-magicpath-id="50" data-magicpath-path="ShiftView.tsx">Incremental</h2>
-          <div className="space-y-2" data-magicpath-id="51" data-magicpath-path="ShiftView.tsx">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" data-magicpath-id="51" data-magicpath-path="ShiftView.tsx">
             <CounterRow icon={<Package className="w-5 h-5" data-magicpath-id="53" data-magicpath-path="ShiftView.tsx" />} label="P360 Sold" value={shiftStore.incremental.p360} onInc={() => handleIncrement('incremental.p360')} onDec={() => handleDecrement('incremental.p360')} target={shiftStore.targets.p360} remaining={shiftStore.remaining('p360')} accent="green" data-magicpath-id="52" data-magicpath-path="ShiftView.tsx" />
             <CounterRow icon={<Headphones className="w-5 h-5" data-magicpath-id="55" data-magicpath-path="ShiftView.tsx" />} label="Accessories Sold" value={shiftStore.incremental.acc} onInc={() => handleIncrement('incremental.acc')} onDec={() => handleDecrement('incremental.acc')} target={shiftStore.targets.acc} remaining={shiftStore.remaining('acc')} accent="blue" data-magicpath-id="54" data-magicpath-path="ShiftView.tsx" />
             <CounterRow icon={<Monitor className="w-5 h-5" data-magicpath-id="57" data-magicpath-path="ShiftView.tsx" />} label="Devices Sold" value={shiftStore.incremental.devices} onInc={() => handleIncrement('incremental.devices')} onDec={() => handleDecrement('incremental.devices')} target={shiftStore.targets.devices} remaining={shiftStore.remaining('devices')} accent="orange" data-magicpath-id="56" data-magicpath-path="ShiftView.tsx" />
-            <CSATRow data-magicpath-id="58" data-magicpath-path="ShiftView.tsx" />
+            <div className="sm:col-span-2" data-magicpath-id="58" data-magicpath-path="ShiftView.tsx">
+              <CSATRow data-magicpath-id="59" data-magicpath-path="ShiftView.tsx" />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Motivation Card */}
-      <MotivationCard metric={motivationData.metric} remaining={motivationData.remaining} progress={motivationData.progress} isVisible={showMotivation} onHide={() => setShowMotivation(false)} duration={2500} data-magicpath-id="59" data-magicpath-path="ShiftView.tsx" />
+      <MotivationCard metric={motivationData.metric} remaining={motivationData.remaining} progress={motivationData.progress} isVisible={showMotivation} onHide={() => setShowMotivation(false)} duration={2500} data-magicpath-id="60" data-magicpath-path="ShiftView.tsx" />
 
       {/* CSAT Keypad Modal */}
-      <KeypadModal isOpen={showKeypad} onClose={() => setShowKeypad(false)} onSubmit={handleCsatSubmit} currentCsatAvg={shiftStore.csatAvg()} currentCsatCount={shiftStore.incremental.csatCount} data-magicpath-id="60" data-magicpath-path="ShiftView.tsx" />
+      <KeypadModal isOpen={showKeypad} onClose={() => setShowKeypad(false)} onSubmit={handleCsatSubmit} currentCsatAvg={shiftStore.csatAvg()} currentCsatCount={shiftStore.incremental.csatCount} data-magicpath-id="61" data-magicpath-path="ShiftView.tsx" />
 
       {/* Sticky Footer */}
-      <div className="fixed bottom-20 left-4 right-4 z-40" data-magicpath-id="61" data-magicpath-path="ShiftView.tsx">
-        <MatteCard className="p-4" variant="primary" data-magicpath-id="62" data-magicpath-path="ShiftView.tsx">
-          <div className="space-y-3" data-magicpath-id="63" data-magicpath-path="ShiftView.tsx">
+      <div className="fixed bottom-20 left-4 right-4 z-40" data-magicpath-id="62" data-magicpath-path="ShiftView.tsx">
+        <MatteCard className="p-4" variant="primary" data-magicpath-id="63" data-magicpath-path="ShiftView.tsx">
+          <div className="space-y-3" data-magicpath-id="64" data-magicpath-path="ShiftView.tsx">
             {/* Progress Bar */}
-            <div data-magicpath-id="64" data-magicpath-path="ShiftView.tsx">
-              <div className="flex items-center justify-between mb-2" data-magicpath-id="65" data-magicpath-path="ShiftView.tsx">
-                <span className="text-white text-sm font-medium" data-magicpath-id="66" data-magicpath-path="ShiftView.tsx">Daily Progress</span>
-                <span className="text-white text-sm font-bold" data-magicpath-id="67" data-magicpath-path="ShiftView.tsx">{overallProgress}%</span>
+            <div data-magicpath-id="65" data-magicpath-path="ShiftView.tsx">
+              <div className="flex items-center justify-between mb-2" data-magicpath-id="66" data-magicpath-path="ShiftView.tsx">
+                <span className="text-white text-sm font-medium" data-magicpath-id="67" data-magicpath-path="ShiftView.tsx">Daily Progress</span>
+                <span className="text-white text-sm font-bold" data-magicpath-id="68" data-magicpath-path="ShiftView.tsx">{overallProgress}%</span>
               </div>
-              <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden" data-magicpath-id="68" data-magicpath-path="ShiftView.tsx">
+              <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden" data-magicpath-id="69" data-magicpath-path="ShiftView.tsx">
                 <motion.div className="h-full bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full" initial={{
                 width: 0
               }} animate={{
                 width: `${overallProgress}%`
               }} transition={{
                 duration: 0.5
-              }} data-magicpath-id="69" data-magicpath-path="ShiftView.tsx" />
+              }} data-magicpath-id="70" data-magicpath-path="ShiftView.tsx" />
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-3" data-magicpath-id="70" data-magicpath-path="ShiftView.tsx">
-              <button onClick={() => shiftStore.saveToLocal()} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-white font-medium transition-colors" data-magicpath-id="71" data-magicpath-path="ShiftView.tsx">
-                <Save className="w-4 h-4" data-magicpath-id="72" data-magicpath-path="ShiftView.tsx" />
-                <span data-magicpath-id="73" data-magicpath-path="ShiftView.tsx">Quick Save</span>
+            <div className="flex space-x-3" data-magicpath-id="71" data-magicpath-path="ShiftView.tsx">
+              <button onClick={() => shiftStore.saveToLocal()} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gray-700 hover:bg-gray-600 rounded-xl text-white font-medium transition-colors" data-magicpath-id="72" data-magicpath-path="ShiftView.tsx">
+                <Save className="w-4 h-4" data-magicpath-id="73" data-magicpath-path="ShiftView.tsx" />
+                <span data-magicpath-id="74" data-magicpath-path="ShiftView.tsx">Quick Save</span>
               </button>
-              <button onClick={handleEndShift} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] rounded-xl text-white font-medium transition-all shadow-lg" data-magicpath-id="74" data-magicpath-path="ShiftView.tsx">
-                <Target className="w-4 h-4" data-magicpath-id="75" data-magicpath-path="ShiftView.tsx" />
-                <span data-magicpath-id="76" data-magicpath-path="ShiftView.tsx">End Shift & Review</span>
+              <button onClick={handleEndShift} className="flex-1 flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] rounded-xl text-white font-medium transition-all shadow-lg" data-magicpath-id="75" data-magicpath-path="ShiftView.tsx">
+                <Target className="w-4 h-4" data-magicpath-id="76" data-magicpath-path="ShiftView.tsx" />
+                <span data-magicpath-id="77" data-magicpath-path="ShiftView.tsx">End Shift & Review</span>
               </button>
             </div>
 
             {/* Mini Motivation */}
-            <div className="text-center" data-magicpath-id="77" data-magicpath-path="ShiftView.tsx">
-              <p className="text-gray-400 text-xs" data-magicpath-id="78" data-magicpath-path="ShiftView.tsx">
+            <div className="text-center" data-magicpath-id="78" data-magicpath-path="ShiftView.tsx">
+              <p className="text-gray-400 text-xs" data-magicpath-id="79" data-magicpath-path="ShiftView.tsx">
                 Keep pushing! You're doing great today! 💪
               </p>
             </div>
