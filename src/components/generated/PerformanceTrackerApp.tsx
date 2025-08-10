@@ -267,9 +267,9 @@ const PerformanceTrackerApp: React.FC = () => {
         </div>
 
         {/* Top Performing and Needs Focus Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4" data-magicpath-id="19" data-magicpath-path="PerformanceTrackerApp.tsx">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" data-magicpath-id="19" data-magicpath-path="PerformanceTrackerApp.tsx">
           {/* Top Performing Card */}
-          <MatteCard className="p-4" variant="accent" data-magicpath-id="20" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <MatteCard className="p-4 h-fit" variant="accent" data-magicpath-id="20" data-magicpath-path="PerformanceTrackerApp.tsx">
             <h2 className="text-lg font-heading text-white mb-3" data-magicpath-id="21" data-magicpath-path="PerformanceTrackerApp.tsx">Top Performing</h2>
             <div className="space-y-3" data-magicpath-id="22" data-magicpath-path="PerformanceTrackerApp.tsx">
               {topTwoMetrics.map((metric, index) => {
@@ -297,7 +297,7 @@ const PerformanceTrackerApp: React.FC = () => {
           </MatteCard>
 
           {/* Needs Focus Card */}
-          <MatteCard className="p-4" variant="secondary" data-magicpath-id="33" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <MatteCard className="p-4 h-fit" variant="secondary" data-magicpath-id="33" data-magicpath-path="PerformanceTrackerApp.tsx">
             <h2 className="text-lg font-heading text-white mb-3" data-magicpath-id="34" data-magicpath-path="PerformanceTrackerApp.tsx">Needs Focus</h2>
             <div className="space-y-3" data-magicpath-id="35" data-magicpath-path="PerformanceTrackerApp.tsx">
               {bottomTwoMetrics.map((metric, index) => {
