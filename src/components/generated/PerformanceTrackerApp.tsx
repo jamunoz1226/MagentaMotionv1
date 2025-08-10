@@ -8,8 +8,9 @@ import ToggleSwitch from './ToggleSwitch';
 import BottomNavBar from './BottomNavBar';
 import LineChart from './LineChart';
 import CatchUpView from './CatchUpView';
+import ShiftView from './ShiftView';
 import { useCatchUpStore } from './CatchUpStore';
-type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup';
+type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup' | 'shift';
 type ViewMode = 'MTD' | 'EOM';
 interface MetricData {
   name: string;
@@ -660,6 +661,10 @@ const PerformanceTrackerApp: React.FC = () => {
       </div>
     </div>;
   const renderCatchUp = () => <CatchUpView viewMode={viewMode} onViewModeChange={setViewMode} data-magicpath-id="164" data-magicpath-path="PerformanceTrackerApp.tsx" />;
+  const renderShift = () => <ShiftView onNavigateToCatchUp={metric => {
+    setCurrentScreen('catchup');
+    // TODO: Pass metric to CatchUpView for preselection
+  }} data-magicpath-id="165" data-magicpath-path="PerformanceTrackerApp.tsx" />;
   const renderCurrentScreen = () => {
     switch (currentScreen) {
       case 'welcome':
@@ -668,19 +673,21 @@ const PerformanceTrackerApp: React.FC = () => {
         return renderDashboard();
       case 'catchup':
         return renderCatchUp();
+      case 'shift':
+        return renderShift();
       case 'metrics':
         return renderMetrics();
       case 'upload':
         return renderUpload();
       case 'daily':
-        return renderDashboard();
-      // Add daily case routing to dashboard
+        return renderShift();
+      // Add daily case routing to shift view
       default:
         return renderDashboard();
     }
   };
-  return <div className="relative" data-magicpath-id="165" data-magicpath-path="PerformanceTrackerApp.tsx">
-      <AnimatePresence mode="wait" data-magicpath-id="166" data-magicpath-path="PerformanceTrackerApp.tsx">
+  return <div className="relative" data-magicpath-id="166" data-magicpath-path="PerformanceTrackerApp.tsx">
+      <AnimatePresence mode="wait" data-magicpath-id="167" data-magicpath-path="PerformanceTrackerApp.tsx">
         <motion.div key={currentScreen} initial={{
         opacity: 0,
         x: 20
@@ -692,12 +699,12 @@ const PerformanceTrackerApp: React.FC = () => {
         x: -20
       }} transition={{
         duration: 0.3
-      }} data-magicpath-id="167" data-magicpath-path="PerformanceTrackerApp.tsx">
+      }} data-magicpath-id="168" data-magicpath-path="PerformanceTrackerApp.tsx">
           {renderCurrentScreen()}
         </motion.div>
       </AnimatePresence>
 
-      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="168" data-magicpath-path="PerformanceTrackerApp.tsx" />}
+      {currentScreen !== 'welcome' && <BottomNavBar currentScreen={currentScreen} onNavigate={setCurrentScreen} data-magicpath-id="169" data-magicpath-path="PerformanceTrackerApp.tsx" />}
 
       {showToast && <motion.div initial={{
       opacity: 0,
@@ -708,11 +715,11 @@ const PerformanceTrackerApp: React.FC = () => {
     }} exit={{
       opacity: 0,
       y: 50
-    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="169" data-magicpath-path="PerformanceTrackerApp.tsx">
-          <MatteCard className="p-4" variant="accent" data-magicpath-id="170" data-magicpath-path="PerformanceTrackerApp.tsx">
-            <div className="flex items-center space-x-3" data-magicpath-id="171" data-magicpath-path="PerformanceTrackerApp.tsx">
-              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="172" data-magicpath-path="PerformanceTrackerApp.tsx" />
-              <p className="text-white" data-magicpath-id="173" data-magicpath-path="PerformanceTrackerApp.tsx">
+    }} className="fixed bottom-24 left-4 right-4 z-50" data-magicpath-id="170" data-magicpath-path="PerformanceTrackerApp.tsx">
+          <MatteCard className="p-4" variant="accent" data-magicpath-id="171" data-magicpath-path="PerformanceTrackerApp.tsx">
+            <div className="flex items-center space-x-3" data-magicpath-id="172" data-magicpath-path="PerformanceTrackerApp.tsx">
+              <CheckCircle className="w-5 h-5 text-green-400" data-magicpath-id="173" data-magicpath-path="PerformanceTrackerApp.tsx" />
+              <p className="text-white" data-magicpath-id="174" data-magicpath-path="PerformanceTrackerApp.tsx">
                 {extractedData ? 'Data saved successfully!' : 'Metrics extracted successfully!'}
               </p>
             </div>

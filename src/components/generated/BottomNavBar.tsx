@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Home, BarChart3, Upload, Target, TrendingUp, Clock } from 'lucide-react';
 import { cn } from '../../lib/utils';
-type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup';
+type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup' | 'shift';
 interface NavItem {
   id: Screen;
   icon: React.ComponentType<{
