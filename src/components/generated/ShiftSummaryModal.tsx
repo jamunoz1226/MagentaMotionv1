@@ -1,0 +1,136 @@
+"use client";
+
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Trophy, TrendingUp, Star } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import MatteCard from './GlassCard';
+interface ShiftSummaryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  totalActivations: number;
+  totalIncremental: number;
+  averageSurveyScore: number;
+  shiftHours?: number | null;
+}
+export default function ShiftSummaryModal({
+  isOpen,
+  onClose,
+  totalActivations,
+  totalIncremental,
+  averageSurveyScore,
+  shiftHours
+}: ShiftSummaryModalProps) {
+  if (!isOpen) return null;
+  const motivationalMessages = ["Fantastic work today! Keep the momentum going tomorrow.", "Outstanding performance! You're crushing your goals.", "Amazing effort today! Tomorrow is another opportunity to excel.", "Incredible dedication! Your hard work is paying off.", "Stellar performance! You're setting the bar high.", "Exceptional work today! Keep up the fantastic energy."];
+  const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+  return <AnimatePresence data-magicpath-id="0" data-magicpath-path="ShiftSummaryModal.tsx">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" data-magicpath-id="1" data-magicpath-path="ShiftSummaryModal.tsx">
+        {/* Backdrop */}
+        <motion.div className="absolute inset-0 bg-black/60 backdrop-blur-sm" initial={{
+        opacity: 0
+      }} animate={{
+        opacity: 1
+      }} exit={{
+        opacity: 0
+      }} onClick={onClose} data-magicpath-id="2" data-magicpath-path="ShiftSummaryModal.tsx" />
+        
+        {/* Modal */}
+        <motion.div className="relative w-full max-w-md" initial={{
+        opacity: 0,
+        scale: 0.9,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        scale: 1,
+        y: 0
+      }} exit={{
+        opacity: 0,
+        scale: 0.9,
+        y: 20
+      }} transition={{
+        type: "spring",
+        duration: 0.5
+      }} data-magicpath-id="3" data-magicpath-path="ShiftSummaryModal.tsx">
+          <MatteCard className="p-6" variant="primary" data-magicpath-id="4" data-magicpath-path="ShiftSummaryModal.tsx">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6" data-magicpath-id="5" data-magicpath-path="ShiftSummaryModal.tsx">
+              <div className="flex items-center space-x-3" data-magicpath-id="6" data-magicpath-path="ShiftSummaryModal.tsx">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#E20074] to-[#20074] flex items-center justify-center" data-magicpath-id="7" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <Trophy className="w-5 h-5 text-white" data-magicpath-id="8" data-magicpath-path="ShiftSummaryModal.tsx" />
+                </div>
+                <div data-magicpath-id="9" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <h2 className="text-xl font-display text-white" data-magicpath-id="10" data-magicpath-path="ShiftSummaryModal.tsx">Shift Complete!</h2>
+                  <p className="text-sm text-gray-400" data-magicpath-id="11" data-magicpath-path="ShiftSummaryModal.tsx">Great work today</p>
+                </div>
+              </div>
+              <button onClick={onClose} className="w-8 h-8 rounded-full bg-gray-700/50 hover:bg-gray-600/50 flex items-center justify-center transition-colors" data-magicpath-id="12" data-magicpath-path="ShiftSummaryModal.tsx">
+                <X className="w-4 h-4 text-gray-400" data-magicpath-id="13" data-magicpath-path="ShiftSummaryModal.tsx" />
+              </button>
+            </div>
+
+            {/* Summary Stats */}
+            <div className="space-y-4 mb-6" data-magicpath-id="14" data-magicpath-path="ShiftSummaryModal.tsx">
+              {/* Shift Hours */}
+              {shiftHours && <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-gray-700/50" data-magicpath-id="15" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <div className="flex items-center space-x-3" data-magicpath-id="16" data-magicpath-path="ShiftSummaryModal.tsx">
+                    <div className="w-8 h-8 rounded-lg bg-blue-400/10 flex items-center justify-center" data-magicpath-id="17" data-magicpath-path="ShiftSummaryModal.tsx">
+                      <TrendingUp className="w-4 h-4 text-blue-400" data-magicpath-id="18" data-magicpath-path="ShiftSummaryModal.tsx" />
+                    </div>
+                    <span className="text-white font-medium" data-magicpath-id="19" data-magicpath-path="ShiftSummaryModal.tsx">Shift Hours</span>
+                  </div>
+                  <span className="text-xl font-bold text-white" data-magicpath-id="20" data-magicpath-path="ShiftSummaryModal.tsx">{shiftHours}</span>
+                </div>}
+
+              {/* Total Activations */}
+              <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-gray-700/50" data-magicpath-id="21" data-magicpath-path="ShiftSummaryModal.tsx">
+                <div className="flex items-center space-x-3" data-magicpath-id="22" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <div className="w-8 h-8 rounded-lg bg-green-400/10 flex items-center justify-center" data-magicpath-id="23" data-magicpath-path="ShiftSummaryModal.tsx">
+                    <TrendingUp className="w-4 h-4 text-green-400" data-magicpath-id="24" data-magicpath-path="ShiftSummaryModal.tsx" />
+                  </div>
+                  <span className="text-white font-medium" data-magicpath-id="25" data-magicpath-path="ShiftSummaryModal.tsx">Total Activations</span>
+                </div>
+                <span className="text-xl font-bold text-green-400" data-magicpath-id="26" data-magicpath-path="ShiftSummaryModal.tsx">{totalActivations}</span>
+              </div>
+
+              {/* Total Incremental */}
+              <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-gray-700/50" data-magicpath-id="27" data-magicpath-path="ShiftSummaryModal.tsx">
+                <div className="flex items-center space-x-3" data-magicpath-id="28" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <div className="w-8 h-8 rounded-lg bg-blue-400/10 flex items-center justify-center" data-magicpath-id="29" data-magicpath-path="ShiftSummaryModal.tsx">
+                    <TrendingUp className="w-4 h-4 text-blue-400" data-magicpath-id="30" data-magicpath-path="ShiftSummaryModal.tsx" />
+                  </div>
+                  <span className="text-white font-medium" data-magicpath-id="31" data-magicpath-path="ShiftSummaryModal.tsx">Total Incremental</span>
+                </div>
+                <span className="text-xl font-bold text-blue-400" data-magicpath-id="32" data-magicpath-path="ShiftSummaryModal.tsx">{totalIncremental}</span>
+              </div>
+
+              {/* Average Survey Score */}
+              <div className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg border border-gray-700/50" data-magicpath-id="33" data-magicpath-path="ShiftSummaryModal.tsx">
+                <div className="flex items-center space-x-3" data-magicpath-id="34" data-magicpath-path="ShiftSummaryModal.tsx">
+                  <div className="w-8 h-8 rounded-lg bg-yellow-400/10 flex items-center justify-center" data-magicpath-id="35" data-magicpath-path="ShiftSummaryModal.tsx">
+                    <Star className="w-4 h-4 text-yellow-400" data-magicpath-id="36" data-magicpath-path="ShiftSummaryModal.tsx" />
+                  </div>
+                  <span className="text-white font-medium" data-magicpath-id="37" data-magicpath-path="ShiftSummaryModal.tsx">Average Survey Score</span>
+                </div>
+                <span className="text-xl font-bold text-yellow-400" data-magicpath-id="38" data-magicpath-path="ShiftSummaryModal.tsx">
+                  {averageSurveyScore > 0 ? averageSurveyScore.toFixed(1) : '—'}
+                </span>
+              </div>
+            </div>
+
+            {/* Motivational Message */}
+            <div className="p-4 bg-gradient-to-r from-[#E20074]/10 to-[#20074]/10 rounded-lg border border-[#E20074]/20 mb-6" data-magicpath-id="39" data-magicpath-path="ShiftSummaryModal.tsx">
+              <p className="text-white text-center font-medium leading-relaxed" data-magicpath-id="40" data-magicpath-path="ShiftSummaryModal.tsx">
+                {randomMessage}
+              </p>
+            </div>
+
+            {/* Close Button */}
+            <button onClick={onClose} className="w-full py-3 bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] rounded-xl text-white font-medium transition-all shadow-lg" data-magicpath-id="41" data-magicpath-path="ShiftSummaryModal.tsx">
+              Close
+            </button>
+          </MatteCard>
+        </motion.div>
+      </div>
+    </AnimatePresence>;
+}
