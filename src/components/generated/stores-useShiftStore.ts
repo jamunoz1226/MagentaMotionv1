@@ -183,13 +183,26 @@ export const useShiftStore = create<ShiftStore>()(
       },
 
       setTarget: (code: string, value: number) => {
-        set((state) => ({
-          ...state,
-          targets: {
-            ...state.targets,
-            [code]: clampToZero(value)
+        set((state) => {
+          if (code === 'csatScore') {
+            // Special handling for csatScore - update the incremental.csatScore directly
+            return {
+              ...state,
+              incremental: {
+                ...state.incremental,
+                csatScore: clampToZero(value)
+              }
+            };
           }
-        }))
+          
+          return {
+            ...state,
+            targets: {
+              ...state.targets,
+              [code]: clampToZero(value)
+            }
+          };
+        });
       },
 
       syncTargetsFromCatchUp: (targetMap: Record<string, number>) => {
