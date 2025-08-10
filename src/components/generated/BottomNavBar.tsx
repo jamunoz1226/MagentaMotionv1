@@ -99,7 +99,8 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                   
                   {/* Icon container */}
                   <div className="relative z-10 mb-1" data-magicpath-id="9" data-magicpath-path="BottomNavBar.tsx">
-                    <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" />
+                    {/* Swap icons for Upload and Metrics tabs */}
+                    {item.id === 'upload' ? <TrendingUp className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-id="10" data-magicpath-path="BottomNavBar.tsx" /> : item.id === 'metrics' ? <Upload className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" /> : <Icon className={cn('w-6 h-6 transition-all duration-300', active && 'drop-shadow-[0_0_8px_rgba(226,0,116,0.5)]')} data-magicpath-id="12" data-magicpath-path="BottomNavBar.tsx" />}
                     
                     {/* Active indicator dot */}
                     {active && <motion.div initial={{
@@ -108,11 +109,11 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 }} animate={{
                   scale: 1,
                   opacity: 1
-                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full shadow-lg" data-magicpath-id="11" data-magicpath-path="BottomNavBar.tsx" />}
+                }} className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-[#E20074] to-[#20074] rounded-full shadow-lg" data-magicpath-id="13" data-magicpath-path="BottomNavBar.tsx" />}
                   </div>
                   
                   {/* Label */}
-                  <span className={cn('text-xs font-medium transition-all duration-300 relative z-10', active ? 'text-white font-semibold' : 'text-gray-400')} data-magicpath-id="12" data-magicpath-path="BottomNavBar.tsx">
+                  <span className={cn('text-xs font-medium transition-all duration-300 relative z-10', active ? 'text-white font-semibold' : 'text-gray-400')} data-magicpath-id="14" data-magicpath-path="BottomNavBar.tsx">
                     {item.label}
                   </span>
                   
@@ -125,14 +126,14 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
                 opacity: 0.3
               }} transition={{
                 duration: 0.2
-              }} data-magicpath-id="13" data-magicpath-path="BottomNavBar.tsx" />
+              }} data-magicpath-id="15" data-magicpath-path="BottomNavBar.tsx" />
                 </motion.button>;
           })}
           </nav>
         </div>
         
         {/* Bottom safe area for devices with home indicators */}
-        <div className="h-safe-area-inset-bottom bg-gradient-to-t from-black/40 to-transparent" data-magicpath-id="14" data-magicpath-path="BottomNavBar.tsx" />
+        <div className="h-safe-area-inset-bottom bg-gradient-to-t from-black/40 to-transparent" data-magicpath-id="16" data-magicpath-path="BottomNavBar.tsx" />
       </div>
     </motion.div>;
 };
