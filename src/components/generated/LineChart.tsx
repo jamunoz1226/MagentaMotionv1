@@ -38,6 +38,20 @@ const DetailCard: React.FC<DetailCardProps> = ({
     good: 'Good progress, keep it up!',
     'needs-improvement': 'Focus area - you can do this!'
   };
+
+  // Get full metric name for tooltip display
+  const metricLabelMap: {
+    [key: string]: string;
+  } = {
+    'Total Revenue': 'Consumer Voice',
+    'New Lines': 'Back to School',
+    'Accessories': 'Total Family Bundle',
+    'Insurance': 'Protection 360 Attachment',
+    'NPS Score': 'Application Performance',
+    'Call Quality': 'Customer Satisfaction',
+    'Sales Quality': 'Sales Quality Score'
+  };
+  const fullMetricName = metricLabelMap[metric.name] || metric.name;
   return <motion.div initial={{
     opacity: 0,
     scale: 0.8,
@@ -90,7 +104,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
           <div className="space-y-4" data-magicpath-id="6" data-magicpath-path="LineChart.tsx">
             <div data-magicpath-id="7" data-magicpath-path="LineChart.tsx">
               <h4 className="text-white font-semibold text-lg leading-tight pr-8" data-magicpath-id="8" data-magicpath-path="LineChart.tsx">
-                {metric.name}
+                {fullMetricName}
               </h4>
               <span className="inline-block mt-1 px-2 py-1 text-xs text-gray-400 bg-gray-800/50 rounded-full uppercase tracking-wide" data-magicpath-id="9" data-magicpath-path="LineChart.tsx">
                 {metric.category}
@@ -158,12 +172,61 @@ const LineChart: React.FC<LineChartProps> = ({
   const plotWidth = chartWidth - padding.left - padding.right;
   const plotHeight = chartHeight - padding.top - padding.bottom;
 
+  // Metric label mapping for display and tooltips
+  const metricLabelMap: {
+    [key: string]: {
+      short: string;
+      full: string;
+    };
+  } = {
+    'Total Revenue': {
+      short: 'CV',
+      full: 'Consumer Voice'
+    },
+    'New Lines': {
+      short: 'BTS',
+      full: 'Back to School'
+    },
+    'Accessories': {
+      short: 'TFB',
+      full: 'Total Family Bundle'
+    },
+    'Insurance': {
+      short: 'P360 Attach',
+      full: 'Protection 360 Attachment'
+    },
+    'NPS Score': {
+      short: 'APP',
+      full: 'Application Performance'
+    },
+    'Call Quality': {
+      short: 'CSAT',
+      full: 'Customer Satisfaction'
+    }
+  };
+
+  // If we have exactly 6 metrics, add Sales Quality as the 7th
+  const displayMetrics = metrics.length === 6 ? [...metrics, {
+    name: 'Sales Quality',
+    actual: 88,
+    target: 95,
+    category: 'Quality' as const
+  }] : metrics;
+
+  // Update the metric label map to include Sales Quality
+  metricLabelMap['Sales Quality'] = {
+    short: 'Sales Quality',
+    full: 'Sales Quality Score'
+  };
+
   // Calculate percentages for each metric
-  const dataPoints = metrics.map((metric, index) => ({
+  const dataPoints = displayMetrics.map((metric, index) => ({
     ...metric,
     percentage: metric.actual / metric.target * 100,
-    x: index / (metrics.length - 1) * plotWidth + padding.left,
-    y: chartHeight - padding.bottom - metric.actual / metric.target * plotHeight
+    x: index / (displayMetrics.length - 1) * plotWidth + padding.left,
+    y: chartHeight - padding.bottom - metric.actual / metric.target * plotHeight,
+    displayLabel: metricLabelMap[metric.name]?.short || metric.name.split(' ')[0],
+    fullName: metricLabelMap[metric.name]?.full || metric.name
   }));
 
   // Create smooth curve path
@@ -192,7 +255,9 @@ const LineChart: React.FC<LineChartProps> = ({
     }
     return path;
   };
-  const handleDotClick = (metric: MetricData, event: React.MouseEvent) => {
+  const handleDotClick = (metric: MetricData & {
+    fullName: string;
+  }, event: React.MouseEvent) => {
     const rect = svgRef.current?.getBoundingClientRect();
     if (rect) {
       setMousePosition({
@@ -235,7 +300,7 @@ const LineChart: React.FC<LineChartProps> = ({
 
         {/* X-axis labels */}
         {dataPoints.map((point, index) => <text key={index} x={point.x} y={chartHeight - 8} fill="rgba(156, 163, 175, 0.7)" fontSize="9" textAnchor="middle" className="font-medium" data-magicpath-id="36" data-magicpath-path="LineChart.tsx">
-            {point.name.split(' ')[0]}
+            {point.displayLabel}
           </text>)}
 
         {/* Animated line path */}
