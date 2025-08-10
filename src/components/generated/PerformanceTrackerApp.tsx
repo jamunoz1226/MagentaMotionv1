@@ -30,37 +30,37 @@ const PerformanceTrackerApp: React.FC = () => {
     actual: 45000,
     target: 50000,
     category: 'Sales',
-    mpid: "2bd1e54e-332a-49d0-8629-45365e901e4e"
+    mpid: "5d851bd1-0c89-4a57-8866-60aa259d8af0"
   }, {
     name: 'New Lines',
     actual: 28,
     target: 35,
     category: 'Sales',
-    mpid: "da622408-7fe9-4b32-aa98-6376cf65270e"
+    mpid: "fbb39746-a115-4255-a449-3c4e8da46be6"
   }, {
     name: 'Accessories',
     actual: 15,
     target: 20,
     category: 'Attach',
-    mpid: "4ae368c5-d3bc-4da5-b7c7-4d87959e5cf2"
+    mpid: "d7219092-075b-48a1-a691-83aee6969dff"
   }, {
     name: 'Insurance',
     actual: 22,
     target: 25,
     category: 'Attach',
-    mpid: "5b4adc36-0edd-4096-9427-4db2f1e63d06"
+    mpid: "c40544d6-cb37-4568-ba01-ccc2234b68bf"
   }, {
     name: 'NPS Score',
     actual: 8.5,
     target: 9.0,
     category: 'Customer',
-    mpid: "b9b5291c-34c7-4df6-9b5d-84e304b0fa9e"
+    mpid: "68840efd-9a47-4c35-8f9a-21ac55363f0b"
   }, {
     name: 'Call Quality',
     actual: 92,
     target: 95,
     category: 'Quality',
-    mpid: "7811cee4-2586-4a81-ada4-66affa326703"
+    mpid: "cddf923e-338e-4ef0-a9d6-90f0944f59f5"
   }];
   const topMetric = mockMetrics.reduce((prev, current) => current.actual / current.target > prev.actual / prev.target ? current : prev);
   const lowestMetric = mockMetrics.reduce((prev, current) => current.actual / current.target < prev.actual / prev.target ? current : prev);
@@ -83,25 +83,25 @@ const PerformanceTrackerApp: React.FC = () => {
         actual: 42500,
         target: 50000,
         category: 'Sales',
-        mpid: "ed905085-1ed1-4cf6-bff4-afbd5090a2b9"
+        mpid: "edc1839b-f7dc-4b35-b0c8-dcb264fe426b"
       }, {
         name: 'New Lines',
         actual: 25,
         target: 35,
         category: 'Sales',
-        mpid: "39cc3677-8163-46b5-92b0-33ffda5471b9"
+        mpid: "3079bdb8-8181-4439-933a-a7e94a06cf65"
       }, {
         name: 'Accessories',
         actual: 18,
         target: 20,
         category: 'Attach',
-        mpid: "8be0dc3f-0aa6-41f2-b0f2-cbd5bb8f08ed"
+        mpid: "4d0af8be-0c8a-414e-80c3-9d10a02277fe"
       }, {
         name: 'Insurance',
         actual: 20,
         target: 25,
         category: 'Attach',
-        mpid: "7389c710-1aea-4dc4-9d20-bd78a479286b"
+        mpid: "3ff205c2-7bd9-4859-8ba9-563ead08176a"
       }];
       setIsExtracting(false);
       setExtractedData(mockExtractedData);
@@ -200,9 +200,9 @@ const PerformanceTrackerApp: React.FC = () => {
           </div>
         </MatteCard>
 
-        <div className="grid grid-cols-2 gap-4" data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx" style={{
+        <div className="grid grid-cols-2 gap-4" style={{
         display: "none"
-      }}>
+      }} data-magicpath-id="36" data-magicpath-path="PerformanceTrackerApp.tsx">
           <MatteCard className="p-4" variant="secondary" data-magicpath-id="37" data-magicpath-path="PerformanceTrackerApp.tsx">
             <button onClick={() => setCurrentScreen('catchup')} className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white hover:text-[#E20074] transition-colors" data-magicpath-id="38" data-magicpath-path="PerformanceTrackerApp.tsx">
               <Calendar className="w-6 h-6" data-magicpath-id="39" data-magicpath-path="PerformanceTrackerApp.tsx" />
@@ -243,32 +243,32 @@ const PerformanceTrackerApp: React.FC = () => {
           icon: Upload,
           label: 'Upload Report',
           screen: 'upload' as Screen,
-          mpid: "f966e08d-758b-4f5c-b47d-d06817607293"
+          mpid: "2803428b-3bf4-4d4f-998a-d7ba2fbb556f"
         }, {
           icon: Target,
           label: 'Daily Goals',
           screen: 'goals' as Screen,
-          mpid: "924050ee-e02f-4c7d-b93c-98848949c6ee"
+          mpid: "6f8cea2b-293c-4d7e-8d08-99814f501fd2"
         }, {
           icon: Calendar,
           label: 'Catch-Up Plan',
           screen: 'catchup' as Screen,
-          mpid: "66588808-d77a-4fcd-8edf-2353f299df16"
+          mpid: "4f135093-ba91-4e7f-ab6d-cec6c97edda7"
         }, {
           icon: BarChart3,
           label: 'Shift Tracker',
           screen: 'daily' as Screen,
-          mpid: "9861c167-69df-4dbd-ae77-219e60a195c0"
+          mpid: "0dec436a-425e-444d-8119-c9c49eb14d7c"
         }, {
           icon: TrendingUp,
           label: 'View All Metrics',
           screen: 'metrics' as Screen,
-          mpid: "75492b2f-3fd9-4b22-9bd6-d501a4e89713"
+          mpid: "0249502e-fb1b-443f-a2ef-bf083559658c"
         }, {
           icon: Award,
           label: 'Trend Insights',
           screen: 'dashboard' as Screen,
-          mpid: "a64b1fee-d81d-4bbe-bf7b-b433843e1267"
+          mpid: "418e9b5d-64dc-4b20-8ecb-a49595859aeb"
         }].map((item, index) => {
           const IconComponent = item.icon;
           return <motion.div key={item.label} initial={{
