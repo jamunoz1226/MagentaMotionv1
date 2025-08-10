@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Home, BarChart3, Upload, Target, TrendingUp } from 'lucide-react';
+import { Home, BarChart3, Upload, Target, TrendingUp, Clock } from 'lucide-react';
 import { cn } from '../../lib/utils';
 type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup';
 interface NavItem {
@@ -43,7 +43,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({
     activeScreens: ['catchup']
   }, {
     id: 'daily',
-    icon: Home,
+    icon: Clock,
     label: 'Shift',
     activeScreens: ['daily']
   }];
