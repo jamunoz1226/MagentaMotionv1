@@ -64,7 +64,7 @@ export default function KeypadModal({
     return !isNaN(score) && score >= 1 && score <= 5;
   };
   const keypadNumbers = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9'], ['.', '0', '⌫']];
-  return <AnimatePresence data-magicpath-id="0" data-magicpath-path="KeypadModal.tsx">
+  return <AnimatePresence>
       {isOpen && <>
           {/* Backdrop */}
           <motion.div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" initial={{
@@ -73,7 +73,7 @@ export default function KeypadModal({
         opacity: 1
       }} exit={{
         opacity: 0
-      }} onClick={onClose} data-magicpath-id="1" data-magicpath-path="KeypadModal.tsx" />
+      }} onClick={onClose} />
 
           {/* Modal */}
           <motion.div className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 max-w-sm mx-auto" initial={{
@@ -92,46 +92,46 @@ export default function KeypadModal({
         type: "spring",
         damping: 25,
         stiffness: 300
-      }} data-magicpath-id="2" data-magicpath-path="KeypadModal.tsx">
-            <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden" data-magicpath-id="3" data-magicpath-path="KeypadModal.tsx">
+      }}>
+            <div className="bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl overflow-hidden">
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-700/50" data-magicpath-id="4" data-magicpath-path="KeypadModal.tsx">
-                <h3 className="text-lg font-semibold text-white" data-magicpath-id="5" data-magicpath-path="KeypadModal.tsx">{title}</h3>
-                <button onClick={onClose} className="w-8 h-8 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 flex items-center justify-center transition-colors" data-magicpath-id="6" data-magicpath-path="KeypadModal.tsx">
-                  <X className="w-4 h-4 text-gray-400" data-magicpath-id="7" data-magicpath-path="KeypadModal.tsx" />
+              <div className="flex items-center justify-between p-4 border-b border-gray-700/50">
+                <h3 className="text-lg font-semibold text-white">{title}</h3>
+                <button onClick={onClose} className="w-8 h-8 rounded-lg bg-gray-800/50 hover:bg-gray-700/50 flex items-center justify-center transition-colors">
+                  <X className="w-4 h-4 text-gray-400" />
                 </button>
               </div>
 
               {/* Display & Preview */}
-              <div className="p-4 space-y-3" data-magicpath-id="8" data-magicpath-path="KeypadModal.tsx">
+              <div className="p-4 space-y-3">
                 {/* Input Display */}
-                <div className="bg-gray-800/50 rounded-xl p-4 text-center" data-magicpath-id="9" data-magicpath-path="KeypadModal.tsx">
-                  <div className="text-2xl font-bold text-white mb-1" data-magicpath-id="10" data-magicpath-path="KeypadModal.tsx">
+                <div className="bg-gray-800/50 rounded-xl p-4 text-center">
+                  <div className="text-2xl font-bold text-white mb-1">
                     {input || '0'}
                   </div>
-                  <div className="text-xs text-gray-400" data-magicpath-id="11" data-magicpath-path="KeypadModal.tsx">
+                  <div className="text-xs text-gray-400">
                     Score (1.0 - 5.0)
                   </div>
                 </div>
 
                 {/* Preview */}
-                <div className="bg-gradient-to-r from-[#E20074]/10 to-[#20074]/10 rounded-xl p-3 border border-[#E20074]/20" data-magicpath-id="12" data-magicpath-path="KeypadModal.tsx">
-                  <div className="flex items-center justify-between text-sm" data-magicpath-id="13" data-magicpath-path="KeypadModal.tsx">
-                    <span className="text-gray-300" data-magicpath-id="14" data-magicpath-path="KeypadModal.tsx">New Average:</span>
-                    <span className="text-white font-semibold" data-magicpath-id="15" data-magicpath-path="KeypadModal.tsx">
+                <div className="bg-gradient-to-r from-[#E20074]/10 to-[#20074]/10 rounded-xl p-3 border border-[#E20074]/20">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-300">New Average:</span>
+                    <span className="text-white font-semibold">
                       {previewAvg.toFixed(2)}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-gray-400 mt-1" data-magicpath-id="16" data-magicpath-path="KeypadModal.tsx">
-                    <span data-magicpath-id="17" data-magicpath-path="KeypadModal.tsx">Total Responses:</span>
-                    <span data-magicpath-id="18" data-magicpath-path="KeypadModal.tsx">{currentCsatCount + (isValidScore() ? 1 : 0)}</span>
+                  <div className="flex items-center justify-between text-xs text-gray-400 mt-1">
+                    <span>Total Responses:</span>
+                    <span>{currentCsatCount + (isValidScore() ? 1 : 0)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Keypad */}
-              <div className="p-4" data-magicpath-id="19" data-magicpath-path="KeypadModal.tsx">
-                <div className="grid grid-cols-3 gap-3" data-magicpath-id="20" data-magicpath-path="KeypadModal.tsx">
+              <div className="p-4">
+                <div className="grid grid-cols-3 gap-3">
                   {keypadNumbers.flat().map((key, index) => <motion.button key={index} className={cn("h-12 rounded-xl font-semibold text-lg transition-colors", key === '⌫' ? "bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/30" : key === '.' ? "bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 border border-gray-600/50" : "bg-gray-800/50 hover:bg-gray-700/50 text-white border border-gray-700/50")} whileTap={{
                 scale: 0.95
               }} onClick={() => {
@@ -142,20 +142,20 @@ export default function KeypadModal({
                 } else {
                   handleNumberPress(key);
                 }
-              }} data-magicpath-id="21" data-magicpath-path="KeypadModal.tsx">
-                      {key === '⌫' ? <Delete className="w-5 h-5 mx-auto" data-magicpath-id="22" data-magicpath-path="KeypadModal.tsx" /> : key}
+              }}>
+                      {key === '⌫' ? <Delete className="w-5 h-5 mx-auto" /> : key}
                     </motion.button>)}
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="p-4 pt-0 flex space-x-3" data-magicpath-id="23" data-magicpath-path="KeypadModal.tsx">
-                <button onClick={handleClear} className="flex-1 py-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl text-gray-300 font-medium transition-colors" data-magicpath-id="24" data-magicpath-path="KeypadModal.tsx">
+              <div className="p-4 pt-0 flex space-x-3">
+                <button onClick={handleClear} className="flex-1 py-3 bg-gray-700/50 hover:bg-gray-600/50 rounded-xl text-gray-300 font-medium transition-colors">
                   Clear
                 </button>
-                <button onClick={handleSubmit} disabled={!isValidScore()} className={cn("flex-1 py-3 rounded-xl font-medium transition-colors flex items-center justify-center space-x-2", isValidScore() ? "bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] text-white shadow-lg" : "bg-gray-700/30 text-gray-500 cursor-not-allowed")} data-magicpath-id="25" data-magicpath-path="KeypadModal.tsx">
-                  <Check className="w-4 h-4" data-magicpath-id="26" data-magicpath-path="KeypadModal.tsx" />
-                  <span data-magicpath-id="27" data-magicpath-path="KeypadModal.tsx">Add Score</span>
+                <button onClick={handleSubmit} disabled={!isValidScore()} className={cn("flex-1 py-3 rounded-xl font-medium transition-colors flex items-center justify-center space-x-2", isValidScore() ? "bg-gradient-to-r from-[#E20074] to-[#20074] hover:from-[#C21E68] hover:to-[#1A0660] text-white shadow-lg" : "bg-gray-700/30 text-gray-500 cursor-not-allowed")}>
+                  <Check className="w-4 h-4" />
+                  <span>Add Score</span>
                 </button>
               </div>
             </div>

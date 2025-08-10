@@ -45,12 +45,12 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
     }
   };
   const colors = statusColors[status];
-  return <div className={`relative inline-flex items-center justify-center ${className}`} data-magicpath-id="0" data-magicpath-path="ProgressRing.tsx">
+  return <div className={`relative inline-flex items-center justify-center ${className}`}>
       <svg width={size} height={size} className="transform -rotate-90" style={{
       filter: `drop-shadow(0 0 6px ${colors.glow}40)`
-    }} data-magicpath-id="1" data-magicpath-path="ProgressRing.tsx">
+    }}>
         {/* Background circle */}
-        <circle cx={size / 2} cy={size / 2} r={radius} stroke="rgba(255, 255, 255, 0.1)" strokeWidth={strokeWidth} fill="transparent" data-magicpath-id="2" data-magicpath-path="ProgressRing.tsx" />
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="rgba(255, 255, 255, 0.1)" strokeWidth={strokeWidth} fill="transparent" />
         
         {/* Progress circle */}
         <motion.circle cx={size / 2} cy={size / 2} r={radius} stroke={colors.stroke} strokeWidth={strokeWidth} fill="transparent" strokeLinecap="round" strokeDasharray={strokeDasharray} strokeDashoffset={animate ? circumference : strokeDashoffset} animate={animate ? {
@@ -61,7 +61,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
         delay: 0.2
       } : undefined} style={{
         filter: `drop-shadow(0 0 4px ${colors.glow}60)`
-      }} data-magicpath-id="3" data-magicpath-path="ProgressRing.tsx" />
+      }} />
         
         {/* Inner glow effect */}
         <motion.circle cx={size / 2} cy={size / 2} r={radius - strokeWidth / 2} stroke={colors.stroke} strokeWidth={1} fill="transparent" opacity={0.3} strokeDasharray={strokeDasharray} strokeDashoffset={animate ? circumference : strokeDashoffset} animate={animate ? {
@@ -70,7 +70,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
         duration: 1.5,
         ease: "easeInOut",
         delay: 0.2
-      } : undefined} data-magicpath-id="4" data-magicpath-path="ProgressRing.tsx" />
+      } : undefined} />
       </svg>
       
       {/* Percentage text */}
@@ -84,10 +84,10 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
       duration: 0.5,
       delay: 0.8,
       ease: "easeOut"
-    } : undefined} data-magicpath-id="5" data-magicpath-path="ProgressRing.tsx">
+    } : undefined}>
           <span className="text-sm font-bold" style={{
         color: colors.text
-      }} data-magicpath-id="6" data-magicpath-path="ProgressRing.tsx">
+      }}>
             {Math.round(percentage)}%
           </span>
         </motion.div>}
@@ -106,7 +106,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
       duration: 0.3,
       delay: 1.2,
       ease: "easeOut"
-    } : undefined} data-magicpath-id="7" data-magicpath-path="ProgressRing.tsx">
+    } : undefined}>
           <motion.div className="w-2 h-2 rounded-full" style={{
         backgroundColor: colors.stroke
       }} animate={animate ? {
@@ -116,7 +116,7 @@ const ProgressRing: React.FC<ProgressRingProps> = ({
         duration: 2,
         repeat: Infinity,
         ease: "easeInOut"
-      } : undefined} data-magicpath-id="8" data-magicpath-path="ProgressRing.tsx" />
+      } : undefined} />
         </motion.div>}
     </div>;
 };

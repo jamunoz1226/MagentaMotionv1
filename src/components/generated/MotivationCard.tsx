@@ -88,7 +88,7 @@ export default function MotivationCard({
     }
   }, [isVisible, metric, remaining, progress, onHide, duration]);
   const IconComponent = currentIcon;
-  return <AnimatePresence data-magicpath-id="0" data-magicpath-path="MotivationCard.tsx">
+  return <AnimatePresence>
       {isVisible && <motion.div className="fixed top-20 left-4 right-4 z-50 pointer-events-none" initial={{
       opacity: 0,
       y: -20,
@@ -106,24 +106,24 @@ export default function MotivationCard({
       damping: 25,
       stiffness: 300,
       duration: 0.4
-    }} data-magicpath-id="1" data-magicpath-path="MotivationCard.tsx">
-          <div className="max-w-sm mx-auto" data-magicpath-id="2" data-magicpath-path="MotivationCard.tsx">
+    }}>
+          <div className="max-w-sm mx-auto">
             <motion.div className={cn("bg-gradient-to-r from-[#E20074]/90 to-[#20074]/90 backdrop-blur-xl", "rounded-2xl border border-[#E20074]/30 shadow-2xl", "p-4 text-center pointer-events-auto")} initial={{
           scale: 0.8
         }} animate={{
           scale: 1
         }} transition={{
           delay: 0.1
-        }} data-magicpath-id="3" data-magicpath-path="MotivationCard.tsx">
-              <div className="flex items-center justify-center space-x-3" data-magicpath-id="4" data-magicpath-path="MotivationCard.tsx">
+        }}>
+              <div className="flex items-center justify-center space-x-3">
                 <motion.div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center" initial={{
               rotate: -10
             }} animate={{
               rotate: 0
             }} transition={{
               delay: 0.2
-            }} data-magicpath-id="5" data-magicpath-path="MotivationCard.tsx">
-                  <IconComponent className="w-5 h-5 text-white" data-magicpath-id="6" data-magicpath-path="MotivationCard.tsx" />
+            }}>
+                  <IconComponent className="w-5 h-5 text-white" />
                 </motion.div>
                 
                 <motion.p className="text-white font-medium text-sm leading-relaxed flex-1" initial={{
@@ -134,7 +134,7 @@ export default function MotivationCard({
               x: 0
             }} transition={{
               delay: 0.3
-            }} data-magicpath-id="7" data-magicpath-path="MotivationCard.tsx">
+            }}>
                   {currentMessage}
                 </motion.p>
               </div>
@@ -147,7 +147,7 @@ export default function MotivationCard({
           }} transition={{
             delay: 0.4,
             duration: 0.3
-          }} data-magicpath-id="8" data-magicpath-path="MotivationCard.tsx">
+          }}>
                   <motion.div className="h-full bg-white/60 rounded-full" initial={{
               width: 0
             }} animate={{
@@ -156,7 +156,7 @@ export default function MotivationCard({
               delay: 0.5,
               duration: 0.6,
               ease: "easeOut"
-            }} data-magicpath-id="9" data-magicpath-path="MotivationCard.tsx" />
+            }} />
                 </motion.div>}
             </motion.div>
           </div>
