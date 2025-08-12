@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import GlassCard from './GlassCard';
+import { calcPopoverPlacement } from '../../utils/calcPopoverPlacement';
+import { zIndex } from '../../settings/z';
 interface MetricData {
   name: string;
   actual: number;
@@ -111,10 +114,10 @@ const LineChart: React.FC<LineChartProps> = ({
   metrics
 }) => {
   const [selectedMetric, setSelectedMetric] = useState<MetricData | null>(null);
-  const [mousePosition, setMousePosition] = useState({
-    x: 0,
-    y: 0
-  });
+  const [anchorRect, setAnchorRect] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
+  const [detailPos, setDetailPos] = useState<{ left: number; top: number } | null>(null);
+  const detailRef = useRef<HTMLDivElement | null>(null);
+  const prevFocusRef = useRef<Element | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const chartWidth = 280;
   const chartHeight = 120;
@@ -217,19 +220,116 @@ const LineChart: React.FC<LineChartProps> = ({
   const handleDotClick = (metric: MetricData & {
     fullName: string;
   }, event: React.MouseEvent) => {
-    const rect = svgRef.current?.getBoundingClientRect();
-    if (rect) {
-      setMousePosition({
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
-      });
+    const svgBounds = svgRef.current?.getBoundingClientRect();
+    if (svgBounds) {
+      // Anchor rect around the clicked point (approx 12x12 box)
+      const ax = event.clientX;
+      const ay = event.clientY;
+      setAnchorRect({ x: ax - 6, y: ay - 6, width: 12, height: 12 });
       setSelectedMetric(metric);
+      // Notify global listeners that chart interaction occurred
+      window.dispatchEvent(new CustomEvent('chart-interaction', { detail: { type: 'click' } }));
     }
   };
   const gradientId = "lineGradient";
   const glowId = "lineGlow";
+  // Outside click and ESC handling for detail popover
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setSelectedMetric(null);
+      }
+    }
+    function onPointerDown(e: MouseEvent) {
+      if (!selectedMetric) return;
+      const detailEl = detailRef.current;
+      const svgEl = svgRef.current;
+      if (!detailEl || !svgEl) return;
+      const withinDetail = detailEl.contains(e.target as Node);
+      const withinChart = svgEl.contains(e.target as Node);
+      const activeInsideDetail = withinDetail && detailEl.contains(document.activeElement);
+      if (!withinDetail && !activeInsideDetail && !withinChart) {
+        setSelectedMetric(null);
+      }
+    }
+    if (selectedMetric) {
+      // focus management
+      prevFocusRef.current = document.activeElement;
+      window.addEventListener('keydown', onKeyDown);
+      window.addEventListener('mousedown', onPointerDown);
+      return () => {
+        window.removeEventListener('keydown', onKeyDown);
+        window.removeEventListener('mousedown', onPointerDown);
+      };
+    }
+  }, [selectedMetric]);
+
+  // Position calculation when anchorRect or size changes
+  useEffect(() => {
+    if (!anchorRect || !selectedMetric) return;
+    const svgBounds = svgRef.current?.getBoundingClientRect();
+    const popEl = detailRef.current;
+    if (!svgBounds || !popEl) return;
+    const popRect = { width: popEl.offsetWidth || 320, height: popEl.offsetHeight || 220 };
+    const placement = calcPopoverPlacement(
+      anchorRect,
+      { x: svgBounds.left, y: svgBounds.top, width: svgBounds.width, height: svgBounds.height },
+      popRect,
+      { preferred: 'top', offset: 8, containerPadding: 8, avoidAnchorCover: true }
+    );
+    setDetailPos({ left: placement.left, top: placement.top });
+  }, [anchorRect, selectedMetric]);
+
+  // Recalculate on viewport resize/orientation change
+  useEffect(() => {
+    function recalc() {
+      if (!selectedMetric || !anchorRect) return;
+      const svgBounds = svgRef.current?.getBoundingClientRect();
+      const popEl = detailRef.current;
+      if (!svgBounds || !popEl) return;
+      const popRect = { width: popEl.offsetWidth || 320, height: popEl.offsetHeight || 220 };
+      const placement = calcPopoverPlacement(
+        anchorRect,
+        { x: svgBounds.left, y: svgBounds.top, width: svgBounds.width, height: svgBounds.height },
+        popRect,
+        { preferred: 'top', offset: 8, containerPadding: 8, avoidAnchorCover: true }
+      );
+      setDetailPos({ left: placement.left, top: placement.top });
+    }
+    if (selectedMetric) {
+      window.addEventListener('resize', recalc);
+      window.addEventListener('orientationchange', recalc as any);
+      return () => {
+        window.removeEventListener('resize', recalc);
+        window.removeEventListener('orientationchange', recalc as any);
+      };
+    }
+  }, [selectedMetric, anchorRect]);
+
+  // Notify other UI about detail open/close
+  useEffect(() => {
+    if (selectedMetric) {
+      window.dispatchEvent(new CustomEvent('line-detail-open'));
+      return () => window.dispatchEvent(new CustomEvent('line-detail-close'));
+    }
+  }, [selectedMetric]);
+
+  // Emit interaction events for hover/pan
+  const onChartPointerActivity = () => {
+    window.dispatchEvent(new CustomEvent('chart-interaction', { detail: { type: 'hover' } }));
+  };
+
   return <div className="relative">
-      <svg ref={svgRef} width={chartWidth} height={chartHeight} className="overflow-visible" viewBox={`0 0 ${chartWidth} ${chartHeight}`}>
+      <svg
+        ref={svgRef}
+        width={chartWidth}
+        height={chartHeight}
+        className="overflow-visible"
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+        onMouseMove={onChartPointerActivity}
+        onPointerDown={onChartPointerActivity}
+        onTouchStart={onChartPointerActivity}
+      >
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#E20074" stopOpacity="0.8" />
@@ -331,38 +431,41 @@ const LineChart: React.FC<LineChartProps> = ({
         <span className="text-xs text-gray-500 font-medium">Metrics</span>
       </div>
 
-      {/* Detail card overlay */}
-      <AnimatePresence>
-        {selectedMetric && <motion.div initial={{
-        opacity: 0
-      }} animate={{
-        opacity: 1
-      }} exit={{
-        opacity: 0
-      }} className="fixed inset-0 z-[9999] flex items-center justify-center" onClick={() => setSelectedMetric(null)} style={{
-        background: 'rgba(0, 0, 0, 0.5)',
-        backdropFilter: 'blur(4px)'
-      }}>
-            <motion.div initial={{
-          opacity: 0,
-          scale: 0.9,
-          y: -20
-        }} animate={{
-          opacity: 1,
-          scale: 1,
-          y: 0
-        }} exit={{
-          opacity: 0,
-          scale: 0.9,
-          y: -20
-        }} transition={{
-          duration: 0.3,
-          ease: "easeOut"
-        }} className="relative z-10 w-full max-w-sm mx-auto" onClick={e => e.stopPropagation()}>
-              <DetailCard metric={selectedMetric} position={mousePosition} onClose={() => setSelectedMetric(null)} />
-            </motion.div>
-          </motion.div>}
-      </AnimatePresence>
+        {/* Detail card popover via portal */}
+      {selectedMetric && detailPos && typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          <motion.div
+            key="line-detail"
+            ref={detailRef}
+            role="tooltip"
+            aria-hidden={false}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="absolute"
+            style={{ position: 'fixed', left: detailPos.left, top: detailPos.top, zIndex: zIndex.tooltip }}
+            tabIndex={-1}
+            onAnimationComplete={() => {
+              // Try focus the card container when it appears
+              try { detailRef.current?.focus(); } catch {}
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                e.stopPropagation();
+                setSelectedMetric(null);
+                const el = prevFocusRef.current as HTMLElement | null;
+                if (el && typeof el.focus === 'function') {
+                  try { el.focus(); } catch {}
+                }
+              }
+            }}
+          >
+            <DetailCard metric={selectedMetric} position={{ x: 0, y: 0 }} onClose={() => setSelectedMetric(null)} />
+          </motion.div>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>;
 };
 export default LineChart;
