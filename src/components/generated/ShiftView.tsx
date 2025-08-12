@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Square, Target, ArrowRight, Phone, Smartphone, Wifi, Package, Headphones, Monitor, Save, CheckCircle } from 'lucide-react';
 import MatteCard from './GlassCard';
@@ -9,6 +9,7 @@ import KeypadModal from './KeypadModal';
 import MotivationCard from './MotivationCard';
 import ShiftSummaryModal from './ShiftSummaryModal';
 import { useShiftStore } from './stores-useShiftStore';
+import { useCatchUpStore } from './CatchUpStore';
 interface ShiftViewProps {
   onNavigateToCatchUp?: (metric?: string) => void;
 }
@@ -43,9 +44,15 @@ export default function ShiftView({
   onNavigateToCatchUp
 }: ShiftViewProps) {
   const shiftStore = useShiftStore();
+  const catchUpStore = useCatchUpStore();
   const [showKeypad, setShowKeypad] = useState(false);
   const [showMotivation, setShowMotivation] = useState(false);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
+  // Local input state for shift hours with stricter typing during init
+  const [localShiftHours, setLocalShiftHours] = useState<number | undefined>(
+    typeof shiftStore.shiftHours === 'number' ? shiftStore.shiftHours : undefined
+  );
+  const [shiftHoursError, setShiftHoursError] = useState<string | null>(null);
   const [motivationData, setMotivationData] = useState({
     metric: '',
     remaining: 0,
@@ -75,13 +82,33 @@ export default function ShiftView({
   const handleShiftHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value === '') {
-      shiftStore.setShiftHours(null);
-    } else {
-      const hours = parseFloat(value);
-      if (!isNaN(hours) && hours >= 0) {
-        shiftStore.setShiftHours(hours);
-      }
+      setLocalShiftHours(undefined);
+      setShiftHoursError('Enter a number (e.g., 8.5)');
+      return;
     }
+    const parsed = Number(value);
+    if (Number.isNaN(parsed)) {
+      setShiftHoursError('Invalid number');
+      return;
+    }
+    if (parsed < 0) {
+      setShiftHoursError('Must be ≥ 0');
+    } else {
+      setShiftHoursError(null);
+    }
+    setLocalShiftHours(parsed);
+  };
+
+  const roundToNearestHalf = (value: number): number => {
+    return Math.round(value * 2) / 2;
+  };
+
+  const handleShiftHoursBlur = () => {
+    if (localShiftHours === undefined) return;
+    const clamped = Math.max(0, localShiftHours);
+    const normalized = roundToNearestHalf(clamped);
+    setLocalShiftHours(normalized);
+    shiftStore.setShiftHours(normalized);
   };
   const showMotivationMessage = (metricPath: string) => {
     const metric = metricPath.split('.')[1] || metricPath;
@@ -118,51 +145,118 @@ export default function ShiftView({
     showMotivationMessage('csat');
   };
 
-  // Find metric with largest remaining/deficit for focus banner
-  const getFocusMetric = () => {
+  // Provide a default shift hours value when none is persisted
+  useEffect(() => {
+    if (shiftStore.shiftHours == null) {
+      shiftStore.setShiftHours(8.0);
+      setLocalShiftHours(8.0);
+      setShiftHoursError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Keep local state in sync if store value is updated externally (e.g., persisted load)
+  useEffect(() => {
+    if (typeof shiftStore.shiftHours === 'number') {
+      setLocalShiftHours(shiftStore.shiftHours);
+      setShiftHoursError(null);
+    }
+  }, [shiftStore.shiftHours]);
+
+  // Hydrate default targets from Catch-Up if available; otherwise use local sane defaults.
+  useEffect(() => {
+    const targetsEmpty = Object.keys(shiftStore.targets || {}).length === 0;
+    if (!targetsEmpty) return;
+
+    const FALLBACK_SHIFT_TARGETS = {
+      voice: 3,
+      bts: 1,
+      tfb: 1,
+      p360: 2,
+      acc: 3,
+      devices: 2
+    } as const;
+
+    const calculations = catchUpStore?.state?.calculations || [];
+    const getPerShift = (code: string): number => {
+      const metric = calculations.find((m) => m.code === code);
+      if (!metric || isNaN(metric.perShiftToCatchUp)) return 0;
+      // Round up to whole actions for daily targets
+      return Math.max(0, Math.ceil(metric.perShiftToCatchUp));
+    };
+
+    const derivedTargets = {
+      voice: getPerShift('CV') || FALLBACK_SHIFT_TARGETS.voice,
+      bts: getPerShift('BTS') || FALLBACK_SHIFT_TARGETS.bts,
+      tfb: getPerShift('TFB') || FALLBACK_SHIFT_TARGETS.tfb,
+      p360: getPerShift('P360') || FALLBACK_SHIFT_TARGETS.p360,
+      acc: getPerShift('APP') || FALLBACK_SHIFT_TARGETS.acc,
+      devices: FALLBACK_SHIFT_TARGETS.devices
+    };
+
+    shiftStore.syncTargetsFromCatchUp(derivedTargets);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [catchUpStore?.state?.calculations]);
+
+  // Find metric with largest remaining/deficit for focus banner (memoized)
+  const focusInfo = useMemo(() => {
     const metricsToCheck = ['voice', 'bts', 'tfb', 'p360', 'acc', 'devices'];
     let maxRemaining = 0;
     let focusMetric = 'voice';
-    metricsToCheck.forEach(metric => {
-      const remaining = shiftStore.remaining(metric);
-      if (remaining > maxRemaining) {
-        maxRemaining = remaining;
+    for (const metric of metricsToCheck) {
+      const valueRemaining = shiftStore.remaining(metric);
+      if (valueRemaining > maxRemaining) {
+        maxRemaining = valueRemaining;
         focusMetric = metric;
       }
-    });
-    return {
-      metric: focusMetric,
-      remaining: maxRemaining
-    };
-  };
-  const focusInfo = getFocusMetric();
+    }
+    return { metric: focusMetric, remaining: maxRemaining };
+  }, [
+    shiftStore.activations,
+    shiftStore.incremental,
+    shiftStore.targets,
+    shiftStore.shiftHours
+  ]);
 
-  // Calculate overall progress
-  const calculateOverallProgress = () => {
-    const metricsWithTargets = ['voice', 'bts', 'tfb', 'p360', 'acc', 'devices'].filter(metric => shiftStore.targets[metric as keyof typeof shiftStore.targets]);
+  // Overall progress percentage (memoized)
+  const overallProgress = useMemo(() => {
+    const metricsWithTargets = ['voice', 'bts', 'tfb', 'p360', 'acc', 'devices'].filter(
+      (metric) => shiftStore.targets[metric as keyof typeof shiftStore.targets]
+    );
     if (metricsWithTargets.length === 0) return 0;
-    const totalProgress = metricsWithTargets.reduce((sum, metric) => {
-      return sum + shiftStore.progressPct(metric);
-    }, 0);
+    const totalProgress = metricsWithTargets.reduce((sum, metric) => sum + shiftStore.progressPct(metric), 0);
     return Math.round(totalProgress / metricsWithTargets.length);
-  };
-  const overallProgress = calculateOverallProgress();
+  }, [
+    shiftStore.activations,
+    shiftStore.incremental,
+    shiftStore.targets,
+    shiftStore.shiftHours
+  ]);
 
-  // Calculate summary data for modal
-  const calculateSummaryData = () => {
-    const totalActivations = shiftStore.activations.voice + shiftStore.activations.bts + shiftStore.activations.tfb;
-    const totalIncremental = shiftStore.incremental.p360 + shiftStore.incremental.acc + shiftStore.incremental.devices;
+  // Summary data for modal (memoized)
+  const summaryData = useMemo(() => {
+    const totalActivations =
+      shiftStore.activations.voice + shiftStore.activations.bts + shiftStore.activations.tfb;
+    const totalIncremental =
+      shiftStore.incremental.p360 + shiftStore.incremental.acc + shiftStore.incremental.devices;
     const averageSurveyScore = shiftStore.csatAvg();
-    return {
-      totalActivations,
-      totalIncremental,
-      averageSurveyScore
-    };
-  };
-  const summaryData = calculateSummaryData();
+    return { totalActivations, totalIncremental, averageSurveyScore };
+  }, [
+    shiftStore.activations,
+    shiftStore.incremental,
+    shiftStore.shiftHours
+  ]);
   const CSATRow = () => {
-    const csatAvg = shiftStore.csatAvg();
-    const csatCount = shiftStore.incremental.csatCount;
+    const csatAvgFromStore = shiftStore.csatAvg();
+    const csatCountFromStore = shiftStore.incremental.csatCount;
+    // Fallback from Catch-Up metrics if store has no CSAT data
+    const csatMetric = catchUpStore?.state?.metrics?.find((m: any) => m.code === 'CSAT');
+    const fallbackCount = csatMetric?.csatCount ?? 0;
+    const fallbackAvg = csatMetric && fallbackCount > 0 && csatMetric.csatTotalScore
+      ? csatMetric.csatTotalScore / fallbackCount
+      : 0;
+    const csatCount = csatCountFromStore > 0 ? csatCountFromStore : fallbackCount;
+    const csatAvg = csatCountFromStore > 0 ? csatAvgFromStore : fallbackAvg;
     return <div className="p-4 bg-gray-800/30 rounded-xl border border-gray-700/50 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -234,7 +328,20 @@ export default function ShiftView({
             <label htmlFor="shift-hours" className="block text-sm font-medium text-white">
               Shift Hours
             </label>
-            <input id="shift-hours" type="number" step="0.5" min="0" max="24" placeholder="e.g., 8.5" value={shiftStore.shiftHours || ''} onChange={handleShiftHoursChange} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent transition-colors" />
+            <input
+              id="shift-hours"
+              type="number"
+              step="0.5"
+              min="0"
+              placeholder="e.g., 8.5"
+              value={localShiftHours ?? ''}
+              onChange={handleShiftHoursChange}
+              onBlur={handleShiftHoursBlur}
+              className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent transition-colors"
+            />
+            <p className={"text-xs mt-1 " + (shiftHoursError ? 'text-red-400' : 'text-gray-400')}>
+              {shiftHoursError || 'e.g., 8.5'}
+            </p>
           </div>
         </MatteCard>
 
@@ -291,8 +398,14 @@ export default function ShiftView({
         </div>
       </div>
 
-      {/* Motivation Card */}
-      <MotivationCard metric={motivationData.metric} remaining={motivationData.remaining} progress={motivationData.progress} isVisible={showMotivation} onHide={() => setShowMotivation(false)} duration={2500} />
+      {/* Motivation Card - uses internal auto-dismiss; duration ignored */}
+      <MotivationCard
+        metric={motivationData.metric}
+        remaining={motivationData.remaining}
+        progress={motivationData.progress}
+        isVisible={showMotivation}
+        onHide={() => setShowMotivation(false)}
+      />
 
       {/* CSAT Keypad Modal */}
       <KeypadModal isOpen={showKeypad} onClose={() => setShowKeypad(false)} onSubmit={handleCsatSubmit} currentCsatAvg={shiftStore.csatAvg()} currentCsatCount={shiftStore.incremental.csatCount} />

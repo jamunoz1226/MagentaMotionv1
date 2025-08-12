@@ -49,9 +49,10 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  overflow: visible; /* ensure no clipping on the container */
 }
 
-@media (min-width: 768px) {
+@media (min-width: 360px) {
   .dash-kpi-grid {
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
@@ -145,6 +146,11 @@ body {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* z-index tokens for overlays */
+  --z-base: 0;
+  --z-tooltip: 30;
+  --z-banner: 35;
+  --z-modal: 50;
 }
 
 .dark {

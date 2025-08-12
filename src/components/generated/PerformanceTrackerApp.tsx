@@ -259,7 +259,7 @@ const PerformanceTrackerApp: React.FC = () => {
         </motion.div>
       </div>
     </div>;
-  const renderDashboard = () => <div className="min-h-screen bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4 pb-20">
+  const renderDashboard = () => <div className="min-h-screen overflow-y-auto bg-gradient-to-br from-gray-950 via-[#20074] to-gray-900 p-4 pb-24">
       <div className="max-w-md mx-auto space-y-4">
         {/* Header */}
         <div className="flex justify-between items-center pt-4 mb-6">
@@ -715,7 +715,7 @@ const PerformanceTrackerApp: React.FC = () => {
     }} exit={{
       opacity: 0,
       y: 50
-    }} className="fixed bottom-24 left-4 right-4 z-50">
+    }} className="fixed bottom-24 left-4 right-4" style={{ zIndex: 45 }}>
           <MatteCard className="p-4" variant="accent">
             <div className="flex items-center space-x-3">
               <CheckCircle className="w-5 h-5 text-green-400" />
