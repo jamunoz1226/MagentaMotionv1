@@ -1,14 +1,17 @@
-[build]
-  command = "yarn build"
-  publish = "dist"
+ [build]
+   command = "npm run build"
+   publish = "dist"
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  [build.environment]
+    NODE_VERSION = "20"
 
-# (Optional) Cache immutable assets safely
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    cache-control = "public, max-age=31536000, immutable"
+ [[redirects]]
+   from = "/*"
+   to = "/index.html"
+   status = 200
+
+ # (Optional) Cache immutable assets safely
+ [[headers]]
+   for = "/assets/*"
+   [headers.values]
+     cache-control = "public, max-age=31536000, immutable"
