@@ -187,6 +187,8 @@ const PerformanceTrackerApp: React.FC = () => {
       // OCR
       const text = await tesseractProvider.recognize(pre, { onProgress: () => {} });
       const { metrics } = canonicalizeOcrText(text);
+      console.log('OCR text preview:', text.slice(0, 500));
+      console.log('Canonical metrics:', metrics);
       // Map canonical to modal structure (temporary simple mapping)
       const mapped: MetricData[] = metrics
         .map((m) => {

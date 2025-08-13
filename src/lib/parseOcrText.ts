@@ -16,8 +16,8 @@ export interface ParseOcrOptions {
   trimLabel?: boolean;
 }
 
-const ACTUAL_RE = /Actual\s*:\s*([\d,]+(?:\.\d+)?)/i;
-const TARGET_RE = /Target\s*:\s*([\d,]+(?:\.\d+)?)/i;
+const ACTUAL_RE = /Actual\s*:?\s*([\d,]+(?:\.\d+)?)/i;
+const TARGET_RE = /Target\s*:?\s*([\d,]+(?:\.\d+)?)/i;
 const PCT_RE = /(\d+(?:\.\d+)?)\s*%/;
 const DECIMAL_RE = /(\d+\.\d+)/;
 const MTD_OPPY_RE = /MTD\s*Oppy\s*:?\s*([\d,]+)/i;
@@ -85,8 +85,9 @@ export function parseOcrText(input: string, options: ParseOcrOptions = {}): RawP
     let avg: number | undefined;
     let mtdOppy: number | undefined;
 
+    const start = i; // include the label line too (some values may be on same line)
     const end = Math.min(lines.length, i + 1 + Math.max(0, lookaheadLines));
-    for (let j = i + 1; j < end; j++) {
+    for (let j = start; j < end; j++) {
       const next = lines[j];
       if (!next) continue;
 
