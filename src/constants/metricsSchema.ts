@@ -2,67 +2,82 @@
 // Only these metrics are allowed to flow OCR → Modal → Save.
 
 export type MetricId =
-  | 'voice'
-  | 'bts'
-  | 'tfb'
-  | 'p360'
-  | 'accessories'
-  | 'devicesSold'
-  | 'surveyScore'
-  | 'surveyCount';
+  | 'cv'            // Core Voice / New Lines
+  | 'bts'           // BTS Activations
+  | 'tfb'           // TFB Activations
+  | 'app'           // App average (2 dp)
+  | 'p360Attach'    // Protection 360 attach percent (1 dp)
+  | 'csat'          // CSAT average (1–10 scale, 2 dp)
+  | 'salesQuality'; // Sales Quality percent (1 dp)
 
-export type MetricValueKind = 'count' | 'percent';
+export type MetricValueKind =
+  | 'count'          // plain count (not used in current whitelist)
+  | 'percent'        // single percent value
+  | 'float'          // single floating-point average
+  | 'count_percent'; // actual, target, percent (and optional mtdOppy)
 
 export interface MetricSpec {
   // Human-friendly label for display contexts (if ever needed)
   label: string;
   // Nature of the value captured for the metric
   valueType: MetricValueKind;
-  // Whether we expect a target (goal) to be provided and tracked
-  hasTarget: boolean;
+  // Whether a target (goal) should be captured (only relevant for countTargetPercent)
+  hasTarget?: boolean;
+  // Whether we should capture Month-To-Date Opportunity
+  hasMtdOppy?: boolean;
+  // Decimal places for rounding (percent/average)
+  decimals?: number;
+  // For averages like CSAT, enforce min/max range
+  min?: number;
+  max?: number;
 }
 
 export const METRICS: Record<MetricId, MetricSpec> = {
-  voice: {
+  cv: {
     label: 'Voice Activations',
-    valueType: 'count',
+    valueType: 'count_percent',
     hasTarget: true,
+    hasMtdOppy: true,
+    decimals: 1, // percent 1 dp
   },
   bts: {
     label: 'BTS Activations',
-    valueType: 'count',
+    valueType: 'count_percent',
     hasTarget: true,
+    hasMtdOppy: true,
+    decimals: 1,
   },
   tfb: {
     label: 'TFB Activations',
-    valueType: 'count',
+    valueType: 'count_percent',
     hasTarget: true,
+    hasMtdOppy: true,
+    decimals: 1,
   },
-  p360: {
-    label: 'P360 Sold',
-    valueType: 'count',
-    hasTarget: true,
+  app: {
+    label: 'App Average',
+    valueType: 'float',
+    hasTarget: false,
+    decimals: 2,
   },
-  accessories: {
-    label: 'Accessories Sold',
-    valueType: 'count',
-    hasTarget: true,
-  },
-  devicesSold: {
-    label: 'Devices Sold',
-    valueType: 'count',
-    hasTarget: true,
-  },
-  surveyScore: {
-    label: 'Survey Score (Avg)',
-    // This is an average score captured as a percentage-like value (0-100 scale)
+  p360Attach: {
+    label: 'P360 Attach %',
     valueType: 'percent',
-    // We do not track a target in the shift store for avg score directly; we store running total and count
     hasTarget: false,
+    decimals: 1,
   },
-  surveyCount: {
-    label: 'Survey Responses',
-    valueType: 'count',
+  csat: {
+    label: 'CSAT (1–10 Avg)',
+    valueType: 'float',
     hasTarget: false,
+    decimals: 2,
+    min: 1,
+    max: 10,
+  },
+  salesQuality: {
+    label: 'Sales Quality %',
+    valueType: 'percent',
+    hasTarget: false,
+    decimals: 1,
   },
 };
