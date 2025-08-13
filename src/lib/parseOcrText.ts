@@ -2,9 +2,11 @@ import { EXCLUDES } from '../constants/labelMap';
 
 export interface RawParsedMetric {
   rawLabel: string;
-  actual?: number;
-  target?: number;
-  percent?: number;
+  actual?: number;   // may be int or decimal
+  target?: number;   // may be int or decimal
+  percent?: number;  // numeric percent without % sign
+  avg?: number;      // first decimal near label when no percent
+  mtdOppy?: number;  // Month-To-Date Opportunity
 }
 
 export interface ParseOcrOptions {
@@ -14,9 +16,11 @@ export interface ParseOcrOptions {
   trimLabel?: boolean;
 }
 
-const ACTUAL_RE = /Actual\s*:\s*([\d,]+)/i;
-const TARGET_RE = /Target\s*:\s*([\d,]+)/i;
+const ACTUAL_RE = /Actual\s*:\s*([\d,]+(?:\.\d+)?)/i;
+const TARGET_RE = /Target\s*:\s*([\d,]+(?:\.\d+)?)/i;
 const PCT_RE = /(\d+(?:\.\d+)?)\s*%/;
+const DECIMAL_RE = /(\d+\.\d+)/;
+const MTD_OPPY_RE = /MTD\s*Oppy\s*:?\s*([\d,]+)/i;
 
 function normalizeInt(text: string | undefined): number | undefined {
   if (!text) return undefined;
@@ -25,7 +29,7 @@ function normalizeInt(text: string | undefined): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
-function normalizeFloat(text: string | undefined): number | undefined {
+function normalizeNumber(text: string | undefined): number | undefined {
   if (!text) return undefined;
   const cleaned = text.replace(/,/g, '');
   const n = parseFloat(cleaned);
@@ -78,32 +82,50 @@ export function parseOcrText(input: string, options: ParseOcrOptions = {}): RawP
     let actual: number | undefined;
     let target: number | undefined;
     let percent: number | undefined;
+    let avg: number | undefined;
+    let mtdOppy: number | undefined;
 
     const end = Math.min(lines.length, i + 1 + Math.max(0, lookaheadLines));
     for (let j = i + 1; j < end; j++) {
       const next = lines[j];
       if (!next) continue;
 
-      if (actual === undefined) {
-        const m = next.match(ACTUAL_RE);
-        if (m) actual = normalizeInt(m[1]);
-      }
-      if (target === undefined) {
-        const m = next.match(TARGET_RE);
-        if (m) target = normalizeInt(m[1]);
-      }
+      // Capture in priority order
       if (percent === undefined) {
         const m = next.match(PCT_RE);
-        if (m) percent = normalizeFloat(m[1]);
+        if (m) percent = normalizeNumber(m[1]);
       }
 
-      // Early exit if all found
-      if (actual !== undefined && target !== undefined && percent !== undefined) break;
+      if (actual === undefined) {
+        const m = next.match(ACTUAL_RE);
+        if (m) actual = normalizeNumber(m[1]);
+      }
+
+      if (target === undefined) {
+        const m = next.match(TARGET_RE);
+        if (m) target = normalizeNumber(m[1]);
+      }
+
+      if (avg === undefined && percent === undefined) {
+        const m = next.match(DECIMAL_RE);
+        if (m) avg = normalizeNumber(m[1]);
+      }
+
+      if (mtdOppy === undefined) {
+        const m = next.match(MTD_OPPY_RE);
+        if (m) mtdOppy = normalizeInt(m[1]);
+      }
     }
 
     // Only include blocks that have at least one numeric finding
-    if (actual !== undefined || target !== undefined || percent !== undefined) {
-      results.push({ rawLabel, actual, target, percent });
+    if (
+      actual !== undefined ||
+      target !== undefined ||
+      percent !== undefined ||
+      avg !== undefined ||
+      mtdOppy !== undefined
+    ) {
+      results.push({ rawLabel, actual, target, percent, avg, mtdOppy });
     }
   }
 
