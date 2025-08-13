@@ -15,11 +15,17 @@ import { tesseractProvider } from '../../lib/tesseractProvider';
 import { canonicalizeOcrText } from '../../lib/ocrPipeline';
 type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup' | 'shift';
 type ViewMode = 'MTD' | 'EOM';
+type MetricCategory = 'Sales' | 'Attach' | 'Customer' | 'Quality';
+
 interface MetricData {
   name: string;
-  actual: number;
-  target: number;
-  category: 'Sales' | 'Attach' | 'Customer' | 'Quality';
+  category: MetricCategory;
+  // count + target (+ percent)
+  actual?: number;
+  target?: number;
+  percent?: number; // 1 dp when displayed
+  // averages
+  avg?: number; // 2 dp when displayed
 }
 interface CallQualityDetails {
   score: number;
@@ -178,6 +184,11 @@ const PerformanceTrackerApp: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
+  // Formatting helpers for the modal
+  const formatCount = (n: number | undefined) => (n ?? 0).toFixed(0);
+  const formatAvg = (n: number | undefined) => (n ?? 0).toFixed(2);
+  const formatPercent = (n: number | undefined) => (n ?? 0).toFixed(1);
+
   const handleExtractMetrics = async () => {
     if (!uploadedImage) return;
     try {
@@ -189,18 +200,26 @@ const PerformanceTrackerApp: React.FC = () => {
       const { metrics } = canonicalizeOcrText(text);
       console.log('OCR text preview:', text.slice(0, 500));
       console.log('Canonical metrics:', metrics);
-      // Map canonical to modal structure (temporary simple mapping)
+      // Map canonical → modal structure with new shapes
       const mapped: MetricData[] = metrics
         .map((m) => {
           switch (m.id) {
-            case 'cv': return { name: 'Consumer Phones', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
-            case 'bts': return { name: 'Consumer BTS', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
-            case 'tfb': return { name: 'TFB', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
-            case 'app': return { name: 'Accessories per Phone', actual: m.avg || 0, target: 0, category: 'Attach' };
-            case 'p360Attach': return { name: 'P360 Attach %', actual: m.percent || 0, target: 0, category: 'Attach' };
-            case 'csat': return { name: 'Customer Satisfaction', actual: m.avg || 0, target: 0, category: 'Customer' };
-            case 'salesQuality': return { name: 'Sales Quality %', actual: m.percent || 0, target: 0, category: 'Quality' };
-            default: return null;
+            case 'cv':
+              return { name: 'Consumer Phones', actual: m.actual, target: m.target, percent: m.percent, category: 'Sales' };
+            case 'bts':
+              return { name: 'Consumer BTS', actual: m.actual, target: m.target, percent: m.percent, category: 'Sales' };
+            case 'tfb':
+              return { name: 'TFB', actual: m.actual, target: m.target, percent: m.percent, category: 'Sales' };
+            case 'app':
+              return { name: 'Accessories per Phone', avg: m.avg, category: 'Attach' };
+            case 'p360Attach':
+              return { name: 'P360 Attach %', percent: m.percent, category: 'Attach' };
+            case 'csat':
+              return { name: 'Customer Satisfaction', avg: m.avg, category: 'Customer' };
+            case 'salesQuality':
+              return { name: 'Sales Quality %', percent: m.percent, category: 'Quality' };
+            default:
+              return null;
           }
         })
         .filter(Boolean) as MetricData[];
@@ -215,7 +234,7 @@ const PerformanceTrackerApp: React.FC = () => {
       setIsExtracting(false);
     }
   };
-  const handleDataEdit = (index: number, field: 'actual' | 'target', value: number) => {
+  const handleDataEdit = (index: number, field: 'actual' | 'target' | 'avg' | 'percent', value: number) => {
     if (editingData) {
       const updated = [...editingData];
       updated[index][field] = value;
@@ -627,22 +646,73 @@ const PerformanceTrackerApp: React.FC = () => {
                   {editingData?.map((metric, index) => <MatteCard key={index} className="p-4" variant="secondary">
                       <div className="space-y-3">
                         <h3 className="text-white font-medium">{metric.name}</h3>
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-xs text-gray-400 mb-1">Actual</label>
-                            <input type="number" value={metric.actual} onChange={e => handleDataEdit(index, 'actual', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" />
+
+                        {/* AVG-ONLY */}
+                        {metric.avg !== undefined && (
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="col-span-2">
+                              <label className="block text-xs text-gray-400 mb-1">Average</label>
+                              <input
+                                type="number"
+                                step="0.01"
+                                value={formatAvg(metric.avg)}
+                                onChange={e => handleDataEdit(index, 'avg', parseFloat(e.target.value))}
+                                className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent"
+                              />
+                            </div>
                           </div>
-                          <div>
-                            <label className="block text-xs text-gray-400 mb-1">Target</label>
-                            <input type="number" value={metric.target} onChange={e => handleDataEdit(index, 'target', parseFloat(e.target.value) || 0)} className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent" />
+                        )}
+
+                        {/* PERCENT-ONLY */}
+                        {metric.avg === undefined && metric.percent !== undefined && metric.target === undefined && metric.actual === undefined && (
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="col-span-2">
+                              <label className="block text-xs text-gray-400 mb-1">Percent</label>
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="number"
+                                  step="0.1"
+                                  value={formatPercent(metric.percent)}
+                                  onChange={e => handleDataEdit(index, 'percent', parseFloat(e.target.value))}
+                                  className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent"
+                                />
+                                <span className="text-gray-400 text-sm">%</span>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-500">Category: {metric.category}</span>
-                          <span className={`font-medium ${metric.actual / metric.target >= 0.9 ? 'text-green-400' : metric.actual / metric.target >= 0.7 ? 'text-yellow-400' : 'text-red-400'}`}>
-                            {Math.round(metric.actual / metric.target * 100)}%
-                          </span>
-                        </div>
+                        )}
+
+                        {/* COUNT + TARGET (+ percent display) */}
+                        {(metric.actual !== undefined || metric.target !== undefined) && metric.avg === undefined && (
+                          <>
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="block text-xs text-gray-400 mb-1">Actual</label>
+                                <input
+                                  type="number"
+                                  value={formatCount(metric.actual)}
+                                  onChange={e => handleDataEdit(index, 'actual', parseFloat(e.target.value) || 0)}
+                                  className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-xs text-gray-400 mb-1">Target</label>
+                                <input
+                                  type="number"
+                                  value={formatCount(metric.target)}
+                                  onChange={e => handleDataEdit(index, 'target', parseFloat(e.target.value) || 0)}
+                                  className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E20074] focus:border-transparent"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-gray-500">Category: {metric.category}</span>
+                              {metric.percent !== undefined && (
+                                <span className="font-medium text-gray-300">{formatPercent(metric.percent)}%</span>
+                              )}
+                            </div>
+                          </>
+                        )}
                       </div>
                     </MatteCard>)}
                 </div>

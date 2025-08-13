@@ -12,7 +12,7 @@ export interface OcrPipelineResult {
 }
 
 export function canonicalizeOcrText(ocrText: string): OcrPipelineResult {
-  const raw: RawParsedMetric[] = parseOcrText(ocrText);
+  const raw: RawParsedMetric[] = parseOcrText(ocrText, { lookaheadLines: 10 });
   const metrics: CanonicalMetric[] = canonicalizeMetrics(raw);
   const oppyById = pickOppyMap(metrics);
   // Dev log for later screens wiring (non-UI)
