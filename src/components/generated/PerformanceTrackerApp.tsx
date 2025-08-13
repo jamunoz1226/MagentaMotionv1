@@ -10,6 +10,9 @@ import LineChart from './LineChart';
 import CatchUpView from './CatchUpView';
 import ShiftView from './ShiftView';
 import { useCatchUpStore } from './CatchUpStore';
+import { preprocessForOcr } from '../../lib/ocrPreprocess';
+import { tesseractProvider } from '../../lib/tesseractProvider';
+import { canonicalizeOcrText } from '../../lib/ocrPipeline';
 type Screen = 'welcome' | 'dashboard' | 'home' | 'metrics' | 'upload' | 'daily' | 'goals' | 'catchup' | 'shift';
 type ViewMode = 'MTD' | 'EOM';
 interface MetricData {
@@ -175,38 +178,40 @@ const PerformanceTrackerApp: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
-  const handleExtractMetrics = () => {
-    setIsExtracting(true);
-    setTimeout(() => {
-      // Mock extracted data
-      const mockExtractedData: MetricData[] = [{
-        name: 'Total Revenue',
-        actual: 42500,
-        target: 50000,
-        category: 'Sales'
-      }, {
-        name: 'New Lines',
-        actual: 25,
-        target: 35,
-        category: 'Sales'
-      }, {
-        name: 'Accessories',
-        actual: 18,
-        target: 20,
-        category: 'Attach'
-      }, {
-        name: 'Insurance',
-        actual: 20,
-        target: 25,
-        category: 'Attach'
-      }];
-      setIsExtracting(false);
-      setExtractedData(mockExtractedData);
-      setEditingData([...mockExtractedData]);
+  const handleExtractMetrics = async () => {
+    if (!uploadedImage) return;
+    try {
+      setIsExtracting(true);
+      // Preprocess
+      const pre = await preprocessForOcr(uploadedImage, { maxSize: 2200, thresholdWindow: 31, thresholdOffset: 4 });
+      // OCR
+      const text = await tesseractProvider.recognize(pre, { onProgress: () => {} });
+      const { metrics } = canonicalizeOcrText(text);
+      // Map canonical to modal structure (temporary simple mapping)
+      const mapped: MetricData[] = metrics
+        .map((m) => {
+          switch (m.id) {
+            case 'cv': return { name: 'Consumer Phones', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
+            case 'bts': return { name: 'Consumer BTS', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
+            case 'tfb': return { name: 'TFB', actual: m.actual || 0, target: m.target || 0, category: 'Sales' };
+            case 'app': return { name: 'Accessories per Phone', actual: m.avg || 0, target: 0, category: 'Attach' };
+            case 'p360Attach': return { name: 'P360 Attach %', actual: m.percent || 0, target: 0, category: 'Attach' };
+            case 'csat': return { name: 'Customer Satisfaction', actual: m.avg || 0, target: 0, category: 'Customer' };
+            case 'salesQuality': return { name: 'Sales Quality %', actual: m.percent || 0, target: 0, category: 'Quality' };
+            default: return null;
+          }
+        })
+        .filter(Boolean) as MetricData[];
+      setExtractedData(mapped);
+      setEditingData([...mapped]);
       setShowDataSummary(true);
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
-    }, 2000);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsExtracting(false);
+    }
   };
   const handleDataEdit = (index: number, field: 'actual' | 'target', value: number) => {
     if (editingData) {
