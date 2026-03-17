@@ -13,3 +13,5 @@ OCR extraction
 
 Notes
 - Built with React, TypeScript, and Vite.
+
+Hello!
